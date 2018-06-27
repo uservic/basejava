@@ -17,44 +17,36 @@ public class ArrayStorage {
     }
 
     public void save(Resume resume) {
-        if (size == 9999) {
+        if (size == storage.length - 1) {
             System.out.println("Storage capacity overflow");
             return;
         }
-        if (!contains(resume.getUuid())) {
-            int indexForNewElement = size;
-            storage[indexForNewElement] = resume;
+        if (getIndexOfUuid(resume.getUuid()) == -1) {
+            storage[size] = resume;
             size++;
         } else {
-            System.out.println("com.urise.webapp.model.Resume is already in list");
+            System.out.println("Resume with uuid " + resume.getUuid() + " is already in list");
         }
     }
 
     public Resume get(String uuid) {
-        if (contains(uuid)) {
-            for (int i = 0; i < size; i++) {
-                if (storage[i].getUuid().equals(uuid)) {
-                    return storage[i];
-                }
-            }
+        int i;
+        if ((i = getIndexOfUuid(uuid)) != -1) {
+            return storage[i];
         } else {
-            System.out.println("com.urise.webapp.model.Resume not found");
+            System.out.println("Resume with uuid " + uuid + " not found");
         }
         return null;
     }
 
     public void delete(String uuid) {
-        if (contains(uuid)) {
-            for (int i = 0; i < size; i++) {
-                if (storage[i].getUuid().equals(uuid)) {
-                    storage[i] = storage[size - 1];
-                    storage[size - 1] = null;
-                    size--;
-                    break;
-                }
-            }
+        int i;
+        if ((i = getIndexOfUuid(uuid)) != -1) {
+            storage[i] = storage[size - 1];
+            storage[size - 1] = null;
+            size--;
         } else {
-            System.out.println("com.urise.webapp.model.Resume not found");
+            System.out.println("Resume with uuid " + uuid + " not found");
         }
     }
 
@@ -70,20 +62,20 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if (contains(resume.getUuid())) {
-           delete(resume.getUuid());
-           save(resume);
+        int i;
+        if ((i = getIndexOfUuid(resume.getUuid())) != -1) {
+            storage[i] = resume;
         } else {
-            System.out.println("com.urise.webapp.model.Resume not found");
+            System.out.println("Resume with uuid " + resume.getUuid() + " not found");
         }
     }
 
-    private boolean contains(String uuid) {
+    private int getIndexOfUuid(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 }
