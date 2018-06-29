@@ -5,6 +5,7 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
+    private Resume[] sortedStorage = getSortedStorage();
 
     @Override
     public void clear() {
@@ -36,5 +37,11 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         Resume searchKey = new Resume();
         searchKey.setUuid(uuid);
         return Arrays.binarySearch(storage, 0, size, searchKey);
+    }
+
+    private Resume[] getSortedStorage() {
+
+
+        return null;
     }
 }
