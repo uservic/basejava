@@ -55,15 +55,13 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void getNotExist() throws Exception {
-        storage.get("dummy");
+        storage.get(resumeDummy.getUuid());
     }
 
     @Test
     public void update() {
-        Resume oldResume = storage.get(UUID_3);
-        Resume resume = new Resume(UUID_3);
-        storage.update(resume);
-        assertNotSame(storage.get(UUID_3), oldResume);
+        storage.update(resumeThree);
+        assertSame(resumeThree, storage.get(UUID_3));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -73,10 +71,9 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void save() {
-        Resume resume = resumeDummy;
-        storage.save(resume);
+        storage.save(resumeDummy);
         assertEquals(4, storage.size());
-        assertEquals(resume, storage.get(resume.getUuid()));
+        assertEquals(resumeDummy, storage.get(resumeDummy.getUuid()));
     }
 
     @Test(expected = ExistStorageException.class)
@@ -87,7 +84,7 @@ public abstract class AbstractArrayStorageTest {
     @Test(expected = StorageException.class)
     public void saveStorageException() {
         try {
-            for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT - 3; i++) {
+            for (int i = storage.size(); i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
         } catch (Exception e) {
@@ -104,6 +101,6 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNotExistStorageException() {
-        storage.delete("dummy");
+        storage.delete(resumeDummy.getUuid());
     }
 }
