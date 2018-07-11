@@ -9,6 +9,8 @@ public interface Storage {
 
     void clear();
 
+    int size();
+
     void update(Resume resume);
 
     void save(Resume resume);
@@ -22,5 +24,4 @@ public interface Storage {
      */
     Resume[] getAll();
 
-    int size();
 }
