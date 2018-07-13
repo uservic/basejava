@@ -24,35 +24,27 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveResume(Resume resume) {
+    protected void saveResume(int index, Resume resume) {
         storage.add(resume);
     }
 
     @Override
-    protected boolean isUpdated(Resume resume) {
-        if (storage.contains(resume)) {
-            storage.add(getIndex(resume.getUuid()), resume);
-            return true;
-        }
-        return false;
+    protected Resume getResume(int index, String uuid) {
+        return storage.get(index);
     }
 
     @Override
-    protected Resume getResume(String uuid) {
-        return storage.get(getIndex(uuid));
+    protected void updateResume(int index, Resume resume) {
+        storage.add(index, resume);
     }
 
     @Override
-    protected boolean containsResume(String uuid) {
-        return getIndex(uuid) >= 0;
+    protected void removeResume(int index, String uuid) {
+        storage.remove(index);
     }
 
     @Override
-    protected void removeResume(String uuid) {
-        storage.remove(getIndex(uuid));
-    }
-
-    private int getIndex(String uuid) {
+    protected int getIndex(String uuid) {
         for (int i = 0; i < storage.size(); i++) {
             if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
