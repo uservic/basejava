@@ -1,62 +1,50 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected int size = 0;
-
-    @Override
-    public void clear() {
-        clearStorage();
-        size = 0;
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
     @Override
     public void update(Resume resume) {
-
+        if (!isUpdated(resume)) {
+            throw new NotExistStorageException(resume.getUuid());
+        }
     }
 
     @Override
     public void save(Resume resume) {
-
+        if (containsResume(resume.getUuid())) {
+            throw new ExistStorageException(resume.getUuid());
+        }
+        saveResume(resume);
     }
 
     @Override
     public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            return getResume(index);
+        if (containsResume(uuid)) {
+            return getResume(uuid);
         }
         throw new NotExistStorageException(uuid);
     }
 
     @Override
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
+        if (containsResume(uuid)) {
+            removeResume(uuid);
         } else {
-            removeResume(index);
+            throw new NotExistStorageException(uuid);
         }
     }
 
-    @Override
-    public Resume[] getAll() {
-        return null;
-    }
+    protected abstract boolean isUpdated(Resume resume);
 
-    protected abstract int getIndex(String uuid);
+    protected abstract boolean containsResume(String uuid);
 
-    protected abstract Resume getResume(int index);
+    protected abstract void saveResume(Resume resume);
 
-    protected abstract void clearStorage();
+    protected abstract Resume getResume(String uuid);
 
-    protected abstract void removeResume(int index);
+    protected abstract void removeResume(String uuid);
 }

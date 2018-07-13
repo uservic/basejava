@@ -1,7 +1,5 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.exception.ExistStorageException;
-import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
@@ -11,22 +9,13 @@ public class ListStorage extends AbstractStorage {
     private List<Resume> storage = new ArrayList<>();
 
     @Override
-    public void update(Resume resume) {
-        if (storage.contains(resume)) {
-            storage.add(getIndex(resume.getUuid()), resume);
-        } else {
-            throw new NotExistStorageException(resume.getUuid());
-        }
+    public void clear() {
+        storage.clear();
     }
 
     @Override
-    public void save(Resume resume) {
-        if (storage.contains(resume)) {
-            throw new ExistStorageException(resume.getUuid());
-        } else {
-            storage.add(resume);
-            size++;
-        }
+    public int size() {
+        return storage.size();
     }
 
     @Override
@@ -35,34 +24,40 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected int getIndex(String uuid) {
-        for (int i = 0; i < size; i++) {
+    protected void saveResume(Resume resume) {
+        storage.add(resume);
+    }
+
+    @Override
+    protected boolean isUpdated(Resume resume) {
+        if (storage.contains(resume)) {
+            storage.add(getIndex(resume.getUuid()), resume);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected Resume getResume(String uuid) {
+        return storage.get(getIndex(uuid));
+    }
+
+    @Override
+    protected boolean containsResume(String uuid) {
+        return getIndex(uuid) >= 0;
+    }
+
+    @Override
+    protected void removeResume(String uuid) {
+        storage.remove(getIndex(uuid));
+    }
+
+    private int getIndex(String uuid) {
+        for (int i = 0; i < storage.size(); i++) {
             if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }
         return -1;
-    }
-
-    @Override
-    protected Resume getResume(int index) {
-        return storage.get(index);
-    }
-
-    @Override
-    protected void clearStorage() {
-        storage.clear();
-    }
-
-    @Override
-    protected void removeResume(int index) {
-        storage.remove(getResume(index));
-        size--;
-    }
-
-
-
-    public List<Resume> getStorage() {
-        return storage;
     }
 }

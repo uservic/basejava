@@ -1,7 +1,5 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.exception.ExistStorageException;
-import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.HashMap;
@@ -11,39 +9,13 @@ public class MapStorage extends AbstractStorage {
     private Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    public void update(Resume resume) {
-        if (storage.containsKey(resume.getUuid())) {
-            storage.put(resume.getUuid(), resume);
-        } else {
-            throw new NotExistStorageException(resume.getUuid());
-        }
+    public void clear() {
+        storage.clear();
     }
 
     @Override
-    public void save(Resume resume) {
-        if (storage.containsKey(resume.getUuid())) {
-            throw new ExistStorageException(resume.getUuid());
-        } else {
-            storage.put(resume.getUuid(), resume);
-            size++;
-        }
-    }
-
-    @Override
-    public Resume get(String uuid) {
-        if (storage.containsKey(uuid)) {
-            return storage.get(uuid);
-        }
-        throw new NotExistStorageException(uuid);
-    }
-
-    @Override
-    public void delete(String uuid) {
-        if (storage.remove(uuid) == null) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            size--;
-        }
+    public int size() {
+        return storage.size();
     }
 
     @Override
@@ -52,22 +24,31 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected int getIndex(String uuid) {
-        return 0;
+    protected boolean isUpdated(Resume resume) {
+        if (containsResume(resume.getUuid())) {
+            storage.put(resume.getUuid(), resume);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    protected Resume getResume(int index) {
-        return null;
+    protected Resume getResume(String uuid) {
+        return storage.get(uuid);
     }
 
     @Override
-    protected void clearStorage() {
-        storage.clear();
+    protected boolean containsResume(String uuid) {
+        return storage.containsKey(uuid);
     }
 
     @Override
-    protected void removeResume(int index) {
+    protected void saveResume(Resume resume) {
+        storage.put(resume.getUuid(), resume);
+    }
 
+    @Override
+    protected void removeResume(String uuid) {
+        storage.remove(uuid);
     }
 }
