@@ -24,27 +24,27 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveResume(int index, Resume resume) {
+    protected void saveResume(Integer index, Resume resume) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected Resume getResume(int index, String uuid) {
+    protected Resume getResume(Integer key, String uuid) {
         return storage.get(uuid);
     }
 
     @Override
-    protected void updateResume(int index, Resume resume) {
+    protected void updateResume(Integer key, Resume resume) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void removeResume(int index, String uuid) {
+    protected void removeResume(Integer key, String uuid) {
         storage.remove(uuid);
     }
 
     @Override
-    protected int getIndex(String uuid) {
+    protected int getKey(String uuid) {
         return storage.containsKey(uuid) ? 1 : -1;
     }
 }

@@ -8,46 +8,51 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        }
-        saveResume(index, resume);
+        int key = getNotExistedKey(resume.getUuid());
+        saveResume(key, resume);
     }
 
     @Override
     public Resume get(String uuid) {
-        int index = checkIndex(uuid);
-        return getResume(index, uuid);
+        int key = getExistedKey(uuid);
+        return getResume(key, uuid);
     }
 
     @Override
     public void update(Resume resume) {
-        int index = checkIndex(resume.getUuid());
-        updateResume(index, resume);
+        int key = getExistedKey(resume.getUuid());
+        updateResume(key, resume);
     }
 
     @Override
     public void delete(String uuid) {
-        int index = checkIndex(uuid);
-        removeResume(index, uuid);
+        int key = getExistedKey(uuid);
+        removeResume(key, uuid);
     }
 
-    private int checkIndex(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
+    private int getExistedKey(String uuid) {
+        int key = getKey(uuid);
+        if (key < 0) {
             throw new NotExistStorageException(uuid);
         }
-        return index;
+        return key;
     }
 
-    protected abstract void saveResume(int index, Resume resume);
+    private int getNotExistedKey(String uuid) {
+        int key = getKey(uuid);
+        if (key >= 0) {
+            throw new ExistStorageException(uuid);
+        }
+        return key;
+    }
 
-    protected abstract Resume getResume(int index, String uuid);
+    protected abstract void saveResume(Integer key, Resume resume);
 
-    protected abstract void removeResume(int index, String uuid);
+    protected abstract Resume getResume(Integer key, String uuid);
 
-    protected abstract void updateResume(int index, Resume resume);
+    protected abstract void removeResume(Integer key, String uuid);
 
-    protected abstract int getIndex(String uuid);
+    protected abstract void updateResume(Integer key, Resume resume);
+
+    protected abstract int getKey(String uuid);
 }
