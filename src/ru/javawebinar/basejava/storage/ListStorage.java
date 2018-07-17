@@ -35,7 +35,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void updateResume(Object key, Resume resume) {
-        storage.add((int) key, resume);
+        storage.set((int) key, resume);
     }
 
     @Override

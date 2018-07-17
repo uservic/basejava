@@ -25,7 +25,7 @@ public class AbstractStorageTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         storage.clear();
         storage.save(RESUME_ONE);
         storage.save(RESUME_TWO);
@@ -55,7 +55,7 @@ public class AbstractStorageTest {
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void getNotExist() throws Exception {
+    public void getNotExist() {
         storage.get(RESUME_DUMMY.getUuid());
     }
 
@@ -67,7 +67,7 @@ public class AbstractStorageTest {
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void updateNotExist() throws Exception {
+    public void updateNotExist() {
         storage.update(RESUME_DUMMY);
     }
 

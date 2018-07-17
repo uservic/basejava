@@ -5,9 +5,6 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 
-/**
- * Array based storage for Resumes
- */
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
@@ -39,18 +36,18 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(Object key, String uuid) {
-        return storage[(int) key];
+    protected Resume getResume(Object index, String uuid) {
+        return storage[(int) index];
     }
 
     @Override
-    protected void updateResume(Object key, Resume resume) {
-        storage[(int) key] = resume;
+    protected void updateResume(Object index, Resume resume) {
+        storage[(int) index] = resume;
     }
 
     @Override
-    protected void removeResume(Object key, String uuid) {
-        shiftLeft((int) key);
+    protected void removeResume(Object index, String uuid) {
+        shiftLeft((int) index);
         size--;
         storage[size] = null;
     }
