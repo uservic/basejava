@@ -23,10 +23,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        Resume[] resumes = Arrays.copyOfRange(storage, 0, size);
-        Arrays.sort(resumes);
-        return Arrays.asList(resumes);
+    protected List<Resume> doListCopy() {
+        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
 
     @Override
@@ -63,11 +61,4 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void insertElement(int index, Resume resume);
 
     protected abstract void shiftLeft(int index);
-
-    @Override
-    protected abstract Integer getKey(String uuid);
-
-    public Resume[] getStorage() {
-        return storage;
-    }
 }

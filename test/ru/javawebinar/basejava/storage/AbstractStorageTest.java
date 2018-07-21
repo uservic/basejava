@@ -9,7 +9,8 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class AbstractStorageTest {
     protected Storage storage;
@@ -17,13 +18,9 @@ public class AbstractStorageTest {
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
 
-    private static final String NAME_1 = "Ann One";
-    private static final String NAME_2 = "Bob Two";
-    private static final String NAME_3 = "Joe Three";
-
-    protected static final Resume RESUME_ONE = new Resume(UUID_1, NAME_1);
-    protected static final Resume RESUME_TWO = new Resume(UUID_2, NAME_2);
-    protected static final Resume RESUME_THREE = new Resume(UUID_3, NAME_3);
+    protected static final Resume RESUME_ONE = new Resume(UUID_1, "Ann One");
+    protected static final Resume RESUME_TWO = new Resume(UUID_2, "Bob Two");
+    protected static final Resume RESUME_THREE = new Resume(UUID_3, "Joe Three");
     protected static final Resume RESUME_DUMMY = new Resume("dummy", "dummyName");
 
     protected AbstractStorageTest(Storage storage) {
@@ -55,7 +52,7 @@ public class AbstractStorageTest {
         resumes.add(RESUME_ONE);
         resumes.add(RESUME_TWO);
         resumes.add(RESUME_THREE);
-        assertEquals(resumes, storage.getAllSorted() );
+        assertEquals(resumes, storage.getAllSorted());
     }
 
     @Test
@@ -70,7 +67,7 @@ public class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume newResume = new Resume(UUID_3, NAME_3);
+        Resume newResume = new Resume(UUID_3, "Joe Three");
         storage.update(newResume);
         assertSame(newResume, storage.get(UUID_3));
     }
