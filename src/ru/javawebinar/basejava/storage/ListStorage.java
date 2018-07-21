@@ -3,6 +3,7 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
@@ -19,37 +20,44 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return storage.toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        List<Resume> result = new ArrayList<>(storage);
+        Collections.sort(result);
+        return result;
     }
 
     @Override
-    protected void saveResume(Object key, Resume resume) {
+    protected void doSave(Object index, Resume resume) {
         storage.add(resume);
     }
 
     @Override
-    protected Resume getResume(Object key, String uuid) {
-        return storage.get((int) key);
+    protected Resume doGet(Object index) {
+        return storage.get((int) index);
     }
 
     @Override
-    protected void updateResume(Object key, Resume resume) {
-        storage.set((int) key, resume);
+    protected void doUpdate(Object index, Resume resume) {
+        storage.set((int) index, resume);
     }
 
     @Override
-    protected void removeResume(Object key, String uuid) {
-        storage.remove((int) key);
+    protected void doDelete(Object index) {
+        storage.remove((int) index);
     }
 
     @Override
-    protected int getKey(String uuid) {
+    protected boolean keyExist(Object key) {
+        return key != null;
+    }
+
+    @Override
+    protected Integer getKey(String uuid) {
         for (int i = 0; i < storage.size(); i++) {
             if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }
-        return -1;
+        return null;
     }
 }

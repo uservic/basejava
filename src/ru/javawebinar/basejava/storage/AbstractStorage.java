@@ -8,51 +8,53 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
-        int key = getNotExistedKey(resume.getUuid());
-        saveResume(key, resume);
+        Object key = getNotExistedSearchKey(resume.getUuid());
+        doSave(key, resume);
     }
 
     @Override
     public Resume get(String uuid) {
-        int key = getExistedKey(uuid);
-        return getResume(key, uuid);
+        Object key = getExistedSearchKey(uuid);
+        return doGet(key);
     }
 
     @Override
     public void update(Resume resume) {
-        int key = getExistedKey(resume.getUuid());
-        updateResume(key, resume);
+        Object key = getExistedSearchKey(resume.getUuid());
+        doUpdate(key, resume);
     }
 
     @Override
     public void delete(String uuid) {
-        int key = getExistedKey(uuid);
-        removeResume(key, uuid);
+        Object key = getExistedSearchKey(uuid);
+        doDelete(key);
     }
 
-    private int getExistedKey(String uuid) {
-        int key = getKey(uuid);
-        if (key < 0) {
+    private Object getExistedSearchKey(String uuid) {
+        Object key = getKey(uuid);
+        if (!keyExist(key)) {
             throw new NotExistStorageException(uuid);
         }
         return key;
     }
 
-    private int getNotExistedKey(String uuid) {
-        int key = getKey(uuid);
-        if (key >= 0) {
+    private Object getNotExistedSearchKey(String uuid) {
+        Object key = getKey(uuid);
+        if (keyExist(key)) {
             throw new ExistStorageException(uuid);
         }
         return key;
     }
 
-    protected abstract void saveResume(Object key, Resume resume);
+    protected abstract boolean keyExist(Object key);
 
-    protected abstract Resume getResume(Object key, String uuid);
+    protected abstract void doSave(Object key, Resume resume);
 
-    protected abstract void removeResume(Object key, String uuid);
+    protected abstract Resume doGet(Object key);
 
-    protected abstract void updateResume(Object key, Resume resume);
+    protected abstract void doDelete(Object key);
 
-    protected abstract int getKey(String uuid);
+    protected abstract void doUpdate(Object key, Resume resume);
+
+    protected abstract Object getKey(String uuid);
 }
