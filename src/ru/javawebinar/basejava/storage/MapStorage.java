@@ -2,9 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
@@ -21,8 +19,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected List<Resume> doListCopy() {
-        return new ArrayList<>(storage.values());
+    protected Resume[] doAllCopy() {
+        return storage.values().toArray(new Resume[0]);
     }
 
     @Override
