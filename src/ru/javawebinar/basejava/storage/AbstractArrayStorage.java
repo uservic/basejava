@@ -4,8 +4,9 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -22,39 +23,39 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume[] doAllCopy() {
-        return Arrays.copyOf(storage, size);
+    protected List<Resume> doAllCopy() {
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     @Override
-    protected void doSave(Object index, Resume resume) {
+    protected void doSave(Integer index, Resume resume) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage capacity overflow", resume.getUuid());
         }
-        insertElement((int) index, resume);
+        insertElement(index, resume);
         size++;
     }
 
     @Override
-    protected Resume doGet(Object index) {
-        return storage[(int) index];
+    protected Resume doGet(Integer index) {
+        return storage[index];
     }
 
     @Override
-    protected void doUpdate(Object index, Resume resume) {
-        storage[(int) index] = resume;
+    protected void doUpdate(Integer index, Resume resume) {
+        storage[index] = resume;
     }
 
     @Override
-    protected void doDelete(Object index) {
-        shiftLeft((int) index);
+    protected void doDelete(Integer index) {
+        shiftLeft(index);
         size--;
         storage[size] = null;
     }
 
     @Override
-    protected boolean keyExist(Object key) {
-        return (int) key >= 0;
+    protected boolean keyExist(Integer key) {
+        return key >= 0;
     }
 
     protected abstract void insertElement(int index, Resume resume);
