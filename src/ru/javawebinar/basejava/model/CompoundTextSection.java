@@ -1,33 +1,25 @@
 package ru.javawebinar.basejava.model;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-public class CompoundTextSection implements TextSections {
-    private final Map<String, Map<LocalDate, String>> map;
+public class CompoundTextSection implements Section {
+    private final List<OrganisationData> organisationDataList;
 
-    public CompoundTextSection() {
-        map = new HashMap<>();
-        String titleOfSection = "No title";
-        Map<LocalDate, String> sectionMap = new HashMap<>();
-        sectionMap.put(LocalDate.now(), "no data");
-        map.put(titleOfSection, sectionMap);
+    public CompoundTextSection(List<OrganisationData> organisationDataList) {
+        this.organisationDataList = organisationDataList;
     }
 
     @Override
-    public Map<String, Map<LocalDate, String>> getContent() {
-        return map;
-    }
-
-    @Override
-    public void addContent(String titleOfSection) {
-        if (map.containsKey(titleOfSection)) {
-            map.get(titleOfSection).put(LocalDate.now(), "some text");
-        } else {
-            Map<LocalDate, String> subSection = new HashMap<>();
-            subSection.put(LocalDate.now(), "some text");
-            map.put(titleOfSection, subSection);
+    public String getContent() {
+        StringBuilder sb = new StringBuilder();
+        for (OrganisationData od : organisationDataList) {
+            sb.append(od.getOrganisationData()).append(" ");
         }
+        return sb.toString();
+    }
+
+    @Override
+    public void addContent(Object organisationData) {
+        organisationDataList.add((OrganisationData) organisationData);
     }
 }

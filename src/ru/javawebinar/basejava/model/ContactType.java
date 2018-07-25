@@ -4,7 +4,7 @@ public enum ContactType {
     PHONE_NUMBER("Телефон"),
     SKYPE("Skype"),
     EMAIL("Почта"),
-    WEB_SITES("Страницы в интернет");
+    ORG_SITE("Сайты организаций");
 
     private String title;
 

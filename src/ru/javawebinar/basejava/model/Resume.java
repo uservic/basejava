@@ -1,17 +1,15 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 
 public class Resume implements Comparable<Resume> {
 
     private final String uuid;
     private final String fullName;
 
-    private final Map<ContactType, TextSections> contacts = new HashMap<>();
-    private final Map<SectionType, TextSections> sections = new HashMap<>();
+    private final Map<ContactType, String> contacts = new HashMap<>();
+    private final Map<SectionType, Section> sections = new HashMap<>();
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -21,20 +19,60 @@ public class Resume implements Comparable<Resume> {
         this.uuid = Objects.requireNonNull(uuid, "uuid must not be null");
         this.fullName = Objects.requireNonNull(fullName, "fullName must not be null");
 
-        contacts.put(ContactType.PHONE_NUMBER, new PlainTextSection());
-        contacts.put(ContactType.SKYPE, new PlainTextSection());
-        contacts.put(ContactType.EMAIL, new PlainTextSection());
+        contacts.put(ContactType.PHONE_NUMBER, new PlainTextSection("+7 921 123 45 67").getContent());
+        contacts.put(ContactType.SKYPE, new PlainTextSection("skype.address").getContent());
+        contacts.put(ContactType.EMAIL, new PlainTextSection("dummy@mail.com").getContent());
 
-        contacts.put(ContactType.WEB_SITES, new ListTextSection());
+        OrgSiteSection orgSiteSection = new OrgSiteSection("Facebook", "www.fb.com");
+        Map<String, String> pairOrgSite = new HashMap<>();
+        pairOrgSite.put("LinkedIn", "www.lnkd.com");
+        orgSiteSection.addContent(pairOrgSite);
+        contacts.put(ContactType.ORG_SITE, orgSiteSection.getContent());
 
-        sections.put(SectionType.OBJECTIVE, new PlainTextSection());
-        sections.put(SectionType.PERSONAL, new PlainTextSection());
+        sections.put(SectionType.OBJECTIVE, new PlainTextSection("position content"));
+        sections.put(SectionType.PERSONAL, new PlainTextSection("personal content"));
 
-        sections.put(SectionType.ACHIEVEMENT, new ListTextSection());
-        sections.put(SectionType.QUALIFICATIONS, new ListTextSection());
+        Section achievemntSection = new ListTextSection();
+        achievemntSection.addContent("achievement content1");
+        achievemntSection.addContent("achievement content2");
+        sections.put(SectionType.ACHIEVEMENT, achievemntSection);
 
-        sections.put(SectionType.EXPERIENCE, new CompoundTextSection());
-        sections.put(SectionType.EDUCATION, new CompoundTextSection());
+        Section qualificationsSection = new ListTextSection();
+        qualificationsSection.addContent("qualifications content1");
+        qualificationsSection.addContent("qualifications content2");
+        sections.put(SectionType.QUALIFICATIONS, qualificationsSection);
+
+        OrganisationData organisationData1 = new OrganisationData(
+                                                            "Organisation1",
+                                                                  LocalDate.of(2018, 7, 1),
+                                                          "org1_content");
+
+        organisationData1.addData(LocalDate.now(), "org1_content_additional" );
+
+        OrganisationData organisationData2 = new OrganisationData(
+                                                            "Organisation2",
+                                                                  LocalDate.of(2018, 7, 2),
+                                                          "org2_content");
+
+        organisationData1.addData(LocalDate.now(), "org2_content_additional" );
+
+        List<OrganisationData> organisationDataList = new ArrayList<>();
+        organisationDataList.add(organisationData1);
+        organisationDataList.add(organisationData2);
+        sections.put(SectionType.EXPERIENCE, new CompoundTextSection(organisationDataList));
+
+        OrganisationData universityData = new OrganisationData(
+                                                         "University1",
+                                                               LocalDate.now(),
+                                                       "uni1_content");
+        OrganisationData universityData2 = new OrganisationData(
+                                                          "University2",
+                                                               LocalDate.now(),
+                                                       "uni2_content");
+        List<OrganisationData> universityDataList = new ArrayList<>();
+        universityDataList.add(universityData);
+        universityDataList.add(universityData2);
+        sections.put(SectionType.EDUCATION, new CompoundTextSection(universityDataList));
     }
 
     public String getUuid() {
@@ -45,11 +83,11 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    public TextSections getContactByType(ContactType ct) {
+    public String getContactByType(ContactType ct) {
         return contacts.get(ct);
     }
 
-    public TextSections getSectionByType(SectionType st) {
+    public Section getSectionByType(SectionType st) {
         return sections.get(st);
     }
 
