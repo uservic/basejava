@@ -7,13 +7,16 @@ public class PlainTextSection implements Section {
         this.content = content;
     }
 
-    @Override
     public String getContent() {
         return content;
     }
 
+    public void addContent(String content) {
+        this.content = content;
+    }
+
     @Override
-    public void addContent(Object content) {
-        this.content =  (String) content;
+    public String toString() {
+        return content;
     }
 }

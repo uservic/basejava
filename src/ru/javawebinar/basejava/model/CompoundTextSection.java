@@ -9,7 +9,6 @@ public class CompoundTextSection implements Section {
         this.organisationDataList = organisationDataList;
     }
 
-    @Override
     public String getContent() {
         StringBuilder sb = new StringBuilder();
         for (OrganisationData od : organisationDataList) {
@@ -18,8 +17,12 @@ public class CompoundTextSection implements Section {
         return sb.toString();
     }
 
+    public void addContent(OrganisationData organisationData) {
+        organisationDataList.add(organisationData);
+    }
+
     @Override
-    public void addContent(Object organisationData) {
-        organisationDataList.add((OrganisationData) organisationData);
+    public String toString() {
+        return getContent();
     }
 }

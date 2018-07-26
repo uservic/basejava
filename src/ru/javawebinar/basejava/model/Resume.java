@@ -1,7 +1,9 @@
 package ru.javawebinar.basejava.model;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 public class Resume implements Comparable<Resume> {
 
@@ -18,61 +20,6 @@ public class Resume implements Comparable<Resume> {
     public Resume(String uuid, String fullName) {
         this.uuid = Objects.requireNonNull(uuid, "uuid must not be null");
         this.fullName = Objects.requireNonNull(fullName, "fullName must not be null");
-
-        contacts.put(ContactType.PHONE_NUMBER, new PlainTextSection("+7 921 123 45 67").getContent());
-        contacts.put(ContactType.SKYPE, new PlainTextSection("skype.address").getContent());
-        contacts.put(ContactType.EMAIL, new PlainTextSection("dummy@mail.com").getContent());
-
-        OrgSiteSection orgSiteSection = new OrgSiteSection("Facebook", "www.fb.com");
-        Map<String, String> pairOrgSite = new HashMap<>();
-        pairOrgSite.put("LinkedIn", "www.lnkd.com");
-        orgSiteSection.addContent(pairOrgSite);
-        contacts.put(ContactType.ORG_SITE, orgSiteSection.getContent());
-
-        sections.put(SectionType.OBJECTIVE, new PlainTextSection("position content"));
-        sections.put(SectionType.PERSONAL, new PlainTextSection("personal content"));
-
-        Section achievemntSection = new ListTextSection();
-        achievemntSection.addContent("achievement content1");
-        achievemntSection.addContent("achievement content2");
-        sections.put(SectionType.ACHIEVEMENT, achievemntSection);
-
-        Section qualificationsSection = new ListTextSection();
-        qualificationsSection.addContent("qualifications content1");
-        qualificationsSection.addContent("qualifications content2");
-        sections.put(SectionType.QUALIFICATIONS, qualificationsSection);
-
-        OrganisationData organisationData1 = new OrganisationData(
-                                                            "Organisation1",
-                                                                  LocalDate.of(2018, 7, 1),
-                                                          "org1_content");
-
-        organisationData1.addData(LocalDate.now(), "org1_content_additional" );
-
-        OrganisationData organisationData2 = new OrganisationData(
-                                                            "Organisation2",
-                                                                  LocalDate.of(2018, 7, 2),
-                                                          "org2_content");
-
-        organisationData1.addData(LocalDate.now(), "org2_content_additional" );
-
-        List<OrganisationData> organisationDataList = new ArrayList<>();
-        organisationDataList.add(organisationData1);
-        organisationDataList.add(organisationData2);
-        sections.put(SectionType.EXPERIENCE, new CompoundTextSection(organisationDataList));
-
-        OrganisationData universityData = new OrganisationData(
-                                                         "University1",
-                                                               LocalDate.now(),
-                                                       "uni1_content");
-        OrganisationData universityData2 = new OrganisationData(
-                                                          "University2",
-                                                               LocalDate.now(),
-                                                       "uni2_content");
-        List<OrganisationData> universityDataList = new ArrayList<>();
-        universityDataList.add(universityData);
-        universityDataList.add(universityData2);
-        sections.put(SectionType.EDUCATION, new CompoundTextSection(universityDataList));
     }
 
     public String getUuid() {
@@ -89,6 +36,14 @@ public class Resume implements Comparable<Resume> {
 
     public Section getSectionByType(SectionType st) {
         return sections.get(st);
+    }
+
+    public void addContact(ContactType ct, String contact) {
+        contacts.put(ct, contact);
+    }
+
+    public void addSection(SectionType st, Section section) {
+        sections.put(st, section);
     }
 
     @Override

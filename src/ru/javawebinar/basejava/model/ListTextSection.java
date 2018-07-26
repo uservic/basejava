@@ -6,13 +6,16 @@ import java.util.List;
 public class ListTextSection implements Section {
     private final List<String> list = new ArrayList<>();
 
-    @Override
     public List<String> getContent() {
         return list;
     }
 
+    public void addContent(String content) {
+        list.add(content);
+    }
+
     @Override
-    public void addContent(Object content) {
-        list.add((String) content);
+    public String toString() {
+        return list.toString();
     }
 }
