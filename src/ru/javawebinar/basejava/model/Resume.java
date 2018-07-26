@@ -30,11 +30,11 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    public String getContactByType(ContactType ct) {
+    public String getContact(ContactType ct) {
         return contacts.get(ct);
     }
 
-    public Section getSectionByType(SectionType st) {
+    public Section getSection(SectionType st) {
         return sections.get(st);
     }
 

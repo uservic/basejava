@@ -3,10 +3,6 @@ package ru.javawebinar.basejava;
 import ru.javawebinar.basejava.model.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class TestResumeCreation {
     public static void main(String[] args) {
@@ -16,11 +12,8 @@ public class TestResumeCreation {
         resume.addContact(ContactType.SKYPE, new PlainTextSection("skype.address").getContent());
         resume.addContact(ContactType.EMAIL, new PlainTextSection("dummy@mail.com").getContent());
 
-        OrgSiteSection orgSiteSection = new OrgSiteSection("Facebook", "www.fb.com");
-        Map<String, String> pairOrgSite = new HashMap<>();
-        pairOrgSite.put("LinkedIn", "www.lnkd.com");
-        orgSiteSection.addContent(pairOrgSite);
-        resume.addContact(ContactType.ORG_SITE, orgSiteSection.getContent());
+        Link linkFb = new Link("Facebook", "www.fb.com");
+        resume.addContact(ContactType.ORG_SITE, linkFb.getLink());
 
         resume.addSection(SectionType.OBJECTIVE, new PlainTextSection("position content"));
         resume.addSection(SectionType.PERSONAL, new PlainTextSection("personal content"));
@@ -35,45 +28,55 @@ public class TestResumeCreation {
         qualificationsSection.addContent("qualifications content2");
         resume.addSection(SectionType.QUALIFICATIONS, qualificationsSection);
 
+        Link org1_link = new Link("Organisation1", "www.org1.com");
         OrganisationData organisationData1 = new OrganisationData(
                 "Organisation1",
-                LocalDate.of(2018, 7, 1),
+                 org1_link,
+                 LocalDate.of(2018, 7, 1),
                 "org1_content");
 
         organisationData1.addData(LocalDate.now(), "org1_content_additional" );
 
+        Link org2_link = new Link("Organisation2", "www.link_org2.com");
         OrganisationData organisationData2 = new OrganisationData(
                 "Organisation2",
+                org2_link,
                 LocalDate.of(2018, 7, 2),
                 "org2_content");
 
         organisationData2.addData(LocalDate.now(), "org2_content_additional" );
 
-        List<OrganisationData> organisationDataList = new ArrayList<>();
-        organisationDataList.add(organisationData1);
-        organisationDataList.add(organisationData2);
-        resume.addSection(SectionType.EXPERIENCE, new CompoundTextSection(organisationDataList));
+        CompoundTextSection compoundOrgTextSection = new CompoundTextSection();
+        compoundOrgTextSection.addContent(organisationData1);
+        compoundOrgTextSection.addContent(organisationData2);
+        resume.addSection(SectionType.EXPERIENCE, compoundOrgTextSection);
 
+        Link uni1_link = new Link("University1", "www.link_uni1.com");
         OrganisationData universityData = new OrganisationData(
                 "University1",
+                uni1_link,
                 LocalDate.now(),
                 "uni1_content");
+
+        Link uni2_link = new Link("University2", "www.link_uni2.com");
         OrganisationData universityData2 = new OrganisationData(
                 "University2",
+                uni2_link,
                 LocalDate.now(),
                 "uni2_content");
-        List<OrganisationData> universityDataList = new ArrayList<>();
-        universityDataList.add(universityData);
-        universityDataList.add(universityData2);
-        resume.addSection(SectionType.EDUCATION, new CompoundTextSection(universityDataList));
+
+        CompoundTextSection compoundUniTextSection = new CompoundTextSection();
+        compoundUniTextSection.addContent(universityData);
+        compoundUniTextSection.addContent(universityData2);
+        resume.addSection(SectionType.EDUCATION, compoundOrgTextSection);
 
         System.out.println();
         for (ContactType contactType : ContactType.values()) {
-            System.out.println(contactType.getTitle() + ": " + resume.getContactByType(contactType));
+            System.out.println(contactType.getTitle() + ": " + resume.getContact(contactType));
         }
         System.out.println("--------------------------");
         for (SectionType sectionType : SectionType.values()) {
-            System.out.println(sectionType.getTitle() + ": " + resume.getSectionByType(sectionType).toString());
+            System.out.println(sectionType.getTitle() + ": " + resume.getSection(sectionType).toString());
         }
     }
 }
