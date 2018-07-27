@@ -1,28 +1,21 @@
 package ru.javawebinar.basejava.model;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 
 public class OrganisationData {
     private String title;
     private Link homePage;
-    private final Map<LocalDate, String> map = new TreeMap<>(Comparator.reverseOrder());
+    private LocalDate date;
+    private String position;
+    private String positionDescription;
 
-    public OrganisationData(String title, Link homePage, LocalDate date, String content) {
+    public OrganisationData(String title, Link homePage, LocalDate date, String position, String positionDescription) {
         this.title = title;
-        map.put(date, content);
         this.homePage = homePage;
-    }
-
-    public void addData(LocalDate date, String content) {
-        map.put(date, content);
-    }
-
-    public String getOrganisationData() {
-        return title + " " + homePage.getLink() + ": " + map.toString();
+        this.date = date;
+        this.position = position;
+        this.positionDescription = positionDescription;
     }
 
     @Override
@@ -32,12 +25,19 @@ public class OrganisationData {
         OrganisationData that = (OrganisationData) o;
         return Objects.equals(title, that.title) &&
                 Objects.equals(homePage, that.homePage) &&
-                Objects.equals(map, that.map);
+                Objects.equals(date, that.date) &&
+                Objects.equals(position, that.position) &&
+                Objects.equals(positionDescription, that.positionDescription);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(title, homePage, map);
+        return Objects.hash(title, homePage, date, position, positionDescription);
+    }
+
+    @Override
+    public String toString() {
+        return title + " " + homePage.getLink() + " " + date + " " + position + " " + positionDescription;
     }
 }

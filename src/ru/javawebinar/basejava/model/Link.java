@@ -8,7 +8,7 @@ public class Link implements Section {
 
     public Link(String title, String link) {
         this.title = title;
-        this.link = link;
+        this.link = Objects.requireNonNull(link, "link must not be null");
     }
 
     public String getLink() {

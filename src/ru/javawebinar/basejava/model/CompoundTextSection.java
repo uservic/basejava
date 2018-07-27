@@ -7,14 +7,6 @@ import java.util.Objects;
 public class CompoundTextSection implements Section {
     private final List<OrganisationData> organisationDataList = new ArrayList<>();
 
-    public String getContent() {
-        StringBuilder sb = new StringBuilder();
-        for (OrganisationData od : organisationDataList) {
-            sb.append(od.getOrganisationData()).append(" ");
-        }
-        return sb.toString();
-    }
-
     public void addContent(OrganisationData data) {
         organisationDataList.add(data);
     }
@@ -35,6 +27,6 @@ public class CompoundTextSection implements Section {
 
     @Override
     public String toString() {
-        return getContent();
+        return organisationDataList.toString();
     }
 }

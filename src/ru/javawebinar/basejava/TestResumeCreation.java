@@ -31,38 +31,39 @@ public class TestResumeCreation {
         Link org1_link = new Link("Organisation1", "www.org1.com");
         OrganisationData organisationData1 = new OrganisationData(
                 "Organisation1",
-                 org1_link,
-                 LocalDate.of(2018, 7, 1),
-                "org1_content");
+                org1_link,
+                LocalDate.of(2018, 7, 1),
+                "org1_pos",
+                "org1_posDescr");
 
-        organisationData1.addData(LocalDate.now(), "org1_content_additional" );
-
-        Link org2_link = new Link("Organisation2", "www.link_org2.com");
+        Link org2_link = new Link("Organisation2", "www.org2.com");
         OrganisationData organisationData2 = new OrganisationData(
                 "Organisation2",
                 org2_link,
                 LocalDate.of(2018, 7, 2),
-                "org2_content");
+                "org2_pos",
+                "org2_posDescr");
 
-        organisationData2.addData(LocalDate.now(), "org2_content_additional" );
 
         CompoundTextSection compoundOrgTextSection = new CompoundTextSection();
         compoundOrgTextSection.addContent(organisationData1);
         compoundOrgTextSection.addContent(organisationData2);
         resume.addSection(SectionType.EXPERIENCE, compoundOrgTextSection);
 
-        Link uni1_link = new Link("University1", "www.link_uni1.com");
+        Link uni1_link = new Link("University1", "www.uni1.com");
         OrganisationData universityData = new OrganisationData(
                 "University1",
                 uni1_link,
                 LocalDate.now(),
+                null,
                 "uni1_content");
 
-        Link uni2_link = new Link("University2", "www.link_uni2.com");
+        Link uni2_link = new Link("University2", "www.uni2.com");
         OrganisationData universityData2 = new OrganisationData(
                 "University2",
                 uni2_link,
                 LocalDate.now(),
+                null,
                 "uni2_content");
 
         CompoundTextSection compoundUniTextSection = new CompoundTextSection();
