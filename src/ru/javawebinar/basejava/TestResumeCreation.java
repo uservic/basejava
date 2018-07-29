@@ -1,75 +1,90 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.util.DateUtil;
 
-import java.time.LocalDate;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestResumeCreation {
     public static void main(String[] args) {
         Resume resume = new Resume("uuid1", "Bob");
 
-        resume.addContact(ContactType.PHONE_NUMBER, new PlainTextSection("+7 921 123 45 67").getContent());
-        resume.addContact(ContactType.SKYPE, new PlainTextSection("skype.address").getContent());
-        resume.addContact(ContactType.EMAIL, new PlainTextSection("dummy@mail.com").getContent());
+        resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 921 123 45 67").toString());
+        resume.addContact(ContactType.SKYPE, new TextSection("skype.address").toString());
+        resume.addContact(ContactType.EMAIL, new TextSection("dummy@mail.com").toString());
 
-        Link linkFb = new Link("Facebook", "www.fb.com");
-        resume.addContact(ContactType.ORG_SITE, linkFb.getLink());
+        Link linkMySite = new Link("HomePage", "www.mysite.com");
+        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
 
-        resume.addSection(SectionType.OBJECTIVE, new PlainTextSection("position content"));
-        resume.addSection(SectionType.PERSONAL, new PlainTextSection("personal content"));
+        Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/AnnOne.com");
+        resume.addContact(ContactType.HOME_PAGE, linkMyLinkedIn.getUrl());
 
-        ListTextSection achievemntSection = new ListTextSection();
-        achievemntSection.addContent("achievement content1");
-        achievemntSection.addContent("achievement content2");
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
+
+        List<String> achievementList = new ArrayList<>();
+        achievementList.add("achievement content1");
+        achievementList.add("achievement content2");
+        ListSection achievemntSection = new ListSection(achievementList);
         resume.addSection(SectionType.ACHIEVEMENT, achievemntSection);
 
-        ListTextSection qualificationsSection = new ListTextSection();
-        qualificationsSection.addContent("qualifications content1");
-        qualificationsSection.addContent("qualifications content2");
+        List<String> qualificationsList = new ArrayList<>();
+        qualificationsList.add("qualifications content1");
+        qualificationsList.add("qualifications content2");
+        ListSection qualificationsSection = new ListSection(qualificationsList);
         resume.addSection(SectionType.QUALIFICATIONS, qualificationsSection);
 
-        Link org1_link = new Link("Organisation1", "www.org1.com");
-        OrganisationData organisationData1 = new OrganisationData(
+        Organization organisationData1 = new Organization(
                 "Organisation1",
-                org1_link,
-                LocalDate.of(2018, 7, 1),
+                "www.org1.com",
+                DateUtil.of(2008, Month.JANUARY),
+                DateUtil.of(2009, Month.NOVEMBER),
                 "org1_pos",
                 "org1_posDescr");
+        organisationData1.addOrganizationContent(
+                DateUtil.of(2010, Month.JANUARY),
+                DateUtil.of(2012, Month.JUNE),
+                "org1_pos2",
+                "org1_posDescr2");
 
-        Link org2_link = new Link("Organisation2", "www.org2.com");
-        OrganisationData organisationData2 = new OrganisationData(
+        Organization organisationData2 = new Organization(
                 "Organisation2",
-                org2_link,
-                LocalDate.of(2018, 7, 2),
+                "www.org2.com",
+                DateUtil.of(2012, Month.AUGUST),
+                DateUtil.of(2013, Month.DECEMBER),
                 "org2_pos",
                 "org2_posDescr");
 
+        List<Organization> organizations1 = new ArrayList<>();
+        organizations1.add(organisationData1);
+        organizations1.add(organisationData2);
+        OrganizationtSection organizationtSection = new OrganizationtSection(organizations1);
 
-        CompoundTextSection compoundOrgTextSection = new CompoundTextSection();
-        compoundOrgTextSection.addContent(organisationData1);
-        compoundOrgTextSection.addContent(organisationData2);
-        resume.addSection(SectionType.EXPERIENCE, compoundOrgTextSection);
+        resume.addSection(SectionType.EXPERIENCE, organizationtSection);
 
-        Link uni1_link = new Link("University1", "www.uni1.com");
-        OrganisationData universityData = new OrganisationData(
+        Organization universityData1 = new Organization(
                 "University1",
-                uni1_link,
-                LocalDate.now(),
-                null,
-                "uni1_content");
+                "www.uni1.com",
+                DateUtil.of(2000, Month.SEPTEMBER),
+                DateUtil.of(2005, Month.JUNE),
+                "student",
+                null);
 
-        Link uni2_link = new Link("University2", "www.uni2.com");
-        OrganisationData universityData2 = new OrganisationData(
+        Organization universityData2 = new Organization(
                 "University2",
-                uni2_link,
-                LocalDate.now(),
-                null,
-                "uni2_content");
+                "www.uni2.com",
+                DateUtil.of(2002, Month.SEPTEMBER),
+                DateUtil.of(2007, Month.JUNE),
+                "student MS",
+                null);
 
-        CompoundTextSection compoundUniTextSection = new CompoundTextSection();
-        compoundUniTextSection.addContent(universityData);
-        compoundUniTextSection.addContent(universityData2);
-        resume.addSection(SectionType.EDUCATION, compoundOrgTextSection);
+        List<Organization> organizations2 = new ArrayList<>();
+        organizations2.add(universityData1);
+        organizations2.add(universityData2);
+        OrganizationtSection organizationtUniSection = new OrganizationtSection(organizations2);
+        resume.addSection(SectionType.EDUCATION, organizationtUniSection);
 
         System.out.println();
         for (ContactType contactType : ContactType.values()) {

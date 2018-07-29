@@ -2,22 +2,18 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
-public class PlainTextSection implements Section {
-    private String content;
+public class TextSection extends Section {
+    private final String content;
 
-    public PlainTextSection(String content) {
-        this.content = content;
-    }
-
-    public String getContent() {
-        return content;
+    public TextSection(String content) {
+        this.content = Objects.requireNonNull(content, "content must not be null");;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PlainTextSection that = (PlainTextSection) o;
+        TextSection that = (TextSection) o;
         return Objects.equals(content, that.content);
     }
 

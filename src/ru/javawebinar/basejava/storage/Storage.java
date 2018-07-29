@@ -10,11 +10,11 @@ public interface Storage {
 
     int size();
 
-    void update(Resume resume);
-
     void save(Resume resume);
 
     Resume get(String uuid);
+
+    void update(Resume resume);
 
     void delete(String uuid);
 
