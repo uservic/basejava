@@ -25,20 +25,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        for (File file : directory.listFiles()) {
-            file.delete();
+        for (File file : dirList(directory)) {
+            doDelete(file);
         }
     }
 
     @Override
     public int size() {
-        return directory.list().length;
+        return dirList(directory).length;
     }
 
     @Override
     protected List<Resume> doAllCopy() {
         List<Resume> resumes = new ArrayList<>();
-        for (File file : directory.listFiles()) {
+        for (File file : dirList(directory)) {
             try {
                 resumes.add(doRead(file));
             } catch (IOException e) {
@@ -52,10 +52,10 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected void doSave(File file, Resume resume) {
         try {
             file.createNewFile();
-            doWrite(file, resume);
         } catch (IOException e) {
             throw new StorageException("IO exception", file.getName(), e);
         }
+        doUpdate(file, resume);
     }
 
     @Override
@@ -80,8 +80,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doDelete(File file) {
-        if (file.isFile()) {
-            file.delete();
+        if (!file.delete()) {
+            throw new StorageException("Unable to delete file", file.getName());
         }
     }
 
@@ -98,4 +98,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected abstract void doWrite(File file, Resume resume) throws IOException;
 
     protected abstract Resume doRead(File file) throws IOException;
+
+    private File[] dirList(File directory) {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("Directory not exist ", directory.getName());
+        }
+        return files;
+    }
 }
