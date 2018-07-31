@@ -17,6 +17,10 @@ public class TextSection extends Section {
         return Objects.equals(content, that.content);
     }
 
+    public String getContent() {
+        return content;
+    }
+
     @Override
     public int hashCode() {
 
