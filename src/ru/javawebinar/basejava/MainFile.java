@@ -28,7 +28,7 @@ public class MainFile {
 //            throw new RuntimeException(e);
 //        }
 
-        traverseAndPrint("..\\basejava\\src");
+        traverseAndPrint("D:\\JavaProjects\\basejava\\src");
     }
 
     public static void traverseAndPrint(String startingPath) {
