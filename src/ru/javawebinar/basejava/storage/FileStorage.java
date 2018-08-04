@@ -27,26 +27,22 @@ public class FileStorage extends AbstractStorage<File> {
         this.strategy = strategy;
     }
 
-    public SerializationStrategy getStrategy() {
-        return strategy;
-    }
-
     @Override
     public void clear() {
-        for (File file : dirList(directory)) {
+        for (File file : dirList()) {
             doDelete(file);
         }
     }
 
     @Override
     public int size() {
-        return dirList(directory).length;
+        return dirList().length;
     }
 
     @Override
     public List<Resume> doAllCopy() {
         List<Resume> resumes = new ArrayList<>();
-        for (File file : dirList(directory)) {
+        for (File file : dirList()) {
             resumes.add(doGet(file));
         }
         return resumes;
@@ -66,7 +62,7 @@ public class FileStorage extends AbstractStorage<File> {
     protected Resume doGet(File file) {
         Resume resume;
         try {
-            resume = doRead(new BufferedInputStream(new FileInputStream(file)));
+            resume = strategy.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File read error", file.getName(), e);
         }
@@ -76,7 +72,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(File file, Resume resume) {
         try {
-            doWrite(new BufferedOutputStream(new FileOutputStream(file)), resume);
+            strategy.doWrite(new BufferedOutputStream(new FileOutputStream(file)), resume);
         } catch (IOException e) {
             throw new StorageException("File write error", file.getName(), e);
         }
@@ -99,15 +95,7 @@ public class FileStorage extends AbstractStorage<File> {
         return new File(directory, uuid);
     }
 
-    protected void doWrite(OutputStream os, Resume resume) throws IOException {
-        strategy.doWrite(os, resume);
-    }
-
-    protected Resume doRead(InputStream is) throws IOException {
-        return strategy.doRead(is);
-    }
-
-    private File[] dirList(File directory) {
+    private File[] dirList() {
         File[] files = directory.listFiles();
         if (files == null) {
             throw new StorageException("Directory not exist ", directory.getName());
