@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.strategy.SerializationStrategy;
+import ru.javawebinar.basejava.storage.serializer.StreamSerializer;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -18,12 +18,11 @@ import java.util.stream.Stream;
 public class PathStorage extends AbstractStorage<Path> {
 
     private Path directory;
-    private SerializationStrategy strategy;
+    private StreamSerializer strategy;
 
-    protected PathStorage(String dir, SerializationStrategy strategy) {
+    protected PathStorage(String dir, StreamSerializer strategy) {
         Path directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
-        Objects.requireNonNull(strategy, "strategy must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory");
         }
@@ -33,17 +32,19 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        dirList().forEach(this::doDelete);
+        getDirStream().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
-        return dirList().collect(Collectors.toList()).size();
+        return (int) getDirStream().count();
     }
 
     @Override
     public List<Resume> doAllCopy() {
-        return dirList().map(this::doGet).collect(Collectors.toList());
+        return getDirStream()
+                .map(this::doGet)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -51,7 +52,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.createFile(file);
         } catch (IOException e) {
-            throw new StorageException("Could not create file ", file.toString(), e);
+            throw new StorageException("Could not create file " + file, getFileName(file), e);
         }
         doUpdate(file, resume);
     }
@@ -62,7 +63,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             resume = strategy.doRead(new BufferedInputStream(Files.newInputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("File read error", file.toString(), e);
+            throw new StorageException("File read error", getFileName(file), e);
         }
         return resume;
     }
@@ -72,7 +73,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             strategy.doWrite(new BufferedOutputStream(Files.newOutputStream(file)), resume);
         } catch (IOException e) {
-            throw new StorageException("File write error", file.toString(), e);
+            throw new StorageException("File write error", resume.getUuid(), e);
         }
     }
 
@@ -81,7 +82,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(file);
         } catch (IOException e) {
-            throw new StorageException("File delete error", file.toString(), e);
+            throw new StorageException("File delete error", getFileName(file), e);
         }
     }
 
@@ -95,11 +96,15 @@ public class PathStorage extends AbstractStorage<Path> {
         return directory.resolve(uuid);
     }
 
-    private Stream<Path> dirList() {
+    private Stream<Path> getDirStream() {
         try {
             return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("Error opening directory", null);
+            throw new StorageException("Error opening directory", e);
         }
+    }
+
+    private String getFileName(Path file) {
+        return file.getFileName().toString();
     }
 }
