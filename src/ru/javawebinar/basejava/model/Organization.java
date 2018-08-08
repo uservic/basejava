@@ -33,6 +33,18 @@ public class Organization implements Serializable {
         this.positions = positions;
     }
 
+    public String getOrgName() {
+        return homePage.getName();
+    }
+
+    public String getOrgUrl() {
+        return homePage.getUrl();
+    }
+
+    public List<Position> getPositions() {
+        return positions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,7 +66,7 @@ public class Organization implements Serializable {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    public static class Position implements Serializable{
+    public static class Position implements Serializable {
 
         private static final long serialVersionUID = 1L;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -71,14 +83,14 @@ public class Organization implements Serializable {
             this(DateUtil.of(startYear, startMonth), DateUtil.NOW, position, description);
         }
 
-        public Position(int startYear, Month startMonth,int endYear, Month endMonth, String position, String description) {
+        public Position(int startYear, Month startMonth, int endYear, Month endMonth, String position, String description) {
             this(DateUtil.of(startYear, startMonth), DateUtil.of(endYear, endMonth), position, description);
         }
 
         public Position(LocalDate startDate, LocalDate endDate, String position, String description) {
-            this.startDate = Objects.requireNonNull(startDate, "startDate must not be null");;
-            this.endDate = Objects.requireNonNull(endDate, "endDate must not be null");;
-            this.position = Objects.requireNonNull(position, "position must not be null");;
+            this.startDate = Objects.requireNonNull(startDate, "startDate must not be null");
+            this.endDate = Objects.requireNonNull(endDate, "endDate must not be null");
+            this.position = Objects.requireNonNull(position, "position must not be null");
             this.description = description;
         }
 
@@ -117,7 +129,7 @@ public class Organization implements Serializable {
 
         @Override
         public String toString() {
-            return "Position(" + startDate + "," + endDate + "," + position + ","+ description + ")";
+            return "Position(" + startDate + "," + endDate + "," + position + "," + description + ")";
         }
     }
 }

@@ -20,7 +20,7 @@ public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
     private StreamSerializer strategy;
 
-    protected PathStorage(String dir, StreamSerializer strategy) {
+    public PathStorage(String dir, StreamSerializer strategy) {
         Path directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
@@ -63,7 +63,8 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             resume = strategy.doRead(new BufferedInputStream(Files.newInputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("File read error", getFileName(file), e);
+            e.printStackTrace();
+            throw new StorageException("File read error " + getFileName(file), e);
         }
         return resume;
     }

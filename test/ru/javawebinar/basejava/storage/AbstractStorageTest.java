@@ -132,8 +132,10 @@ public class AbstractStorageTest {
         Organization organisationData1 = new Organization(
                 "Organisation1",
                 "www.org1.com",
-                new Organization.Position(2009, Month.JANUARY, 2010, Month.JANUARY, "org1_pos", "org1_posDescr"),
-                new Organization.Position(2010, Month.JANUARY, 2012, Month.JUNE, "org1_pos2", "org1_posDescr2"));
+                new Organization.Position(2009, Month.JANUARY, 2010, Month.JANUARY,
+                        "org1_pos", "org1_posDescr"),
+                new Organization.Position(2010, Month.JANUARY, 2012, Month.JUNE,
+                        "org1_pos2", "org1_posDescr2"));
 
         Organization organisationData2 = new Organization(
                 "Organisation2",
@@ -145,12 +147,14 @@ public class AbstractStorageTest {
         Organization universityData1 = new Organization(
                 "University1",
                 "www.uni1.com",
-                new Organization.Position(2000, Month.SEPTEMBER, 2005, Month.JUNE, "student", null));
+                new Organization.Position(2000, Month.SEPTEMBER, 2005, Month.JUNE,
+                        "student", null));
 
         Organization universityData2 = new Organization(
                 "University2",
                 "www.uni2.com",
-                new Organization.Position(2005, Month.SEPTEMBER, 2007, Month.JUNE, "student", null));
+                new Organization.Position(2005, Month.SEPTEMBER, 2007, Month.JUNE,
+                        "student", null));
 
         resume.addSection(SectionType.EDUCATION, new OrganizationtSection(universityData1, universityData2));
 
