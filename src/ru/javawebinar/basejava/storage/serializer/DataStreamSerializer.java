@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.storage.serializer;
 
+import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.*;
 
 import java.io.*;
@@ -18,45 +19,38 @@ public class DataStreamSerializer implements StreamSerializer {
 
             Map<ContactType, String> contacts = resume.getContacts();
             dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-                dos.writeUTF(entry.getKey().toString());
-                dos.writeUTF(entry.getValue());
-            }
+
+            contacts.forEach((k, v) -> {
+                writeStringData(dos, k.toString());
+                writeStringData(dos, v);
+            });
 
             Map<SectionType, Section> sections = resume.getSections();
             dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-                SectionType key = entry.getKey();
-                Section value = entry.getValue();
-                dos.writeUTF(key.toString());
 
-                if (key == SectionType.OBJECTIVE || key == SectionType.PERSONAL) {
-                    dos.writeUTF(value.toString());
-                } else if (key == SectionType.ACHIEVEMENT || key == SectionType.QUALIFICATIONS) {
-                    List<String> listItems = ((ListSection) value).getItems();
-                    dos.writeInt(listItems.size());
-                    for (String item : listItems) {
-                        dos.writeUTF(item);
-                    }
-                } else if (key == SectionType.EXPERIENCE || key == SectionType.EDUCATION) {
-                    List<Organization> organizations = ((OrganizationtSection) value).getOrganizations();
-                    dos.writeInt(organizations.size());
-                    for (Organization org : organizations) {
-                        dos.writeUTF(org.getOrgName());
-                        dos.writeUTF(org.getOrgUrl());
-
-                        List<Organization.Position> positions = org.getPositions();
-                        dos.writeInt(positions.size());
-                        for (Organization.Position position : positions) {
-                            dos.writeUTF(position.getStartDate().toString());
-                            dos.writeUTF(position.getEndDate().toString());
-                            dos.writeUTF(position.getPosition());
-                            String description = position.getDescription();
-                            dos.writeUTF(description == null ? "" : description);
-                        }
-                    }
+            sections.forEach((k, v) -> {
+                writeStringData(dos, k.toString());
+                switch (k) {
+                    case OBJECTIVE:
+                        writeStringData(dos, v.toString());
+                        break;
+                    case PERSONAL:
+                        writeStringData(dos, v.toString());
+                        break;
+                    case ACHIEVEMENT:
+                        writeItemsList(dos, v);
+                        break;
+                    case QUALIFICATIONS:
+                        writeItemsList(dos, v);
+                        break;
+                    case EXPERIENCE:
+                        writeOrgList(dos, v);
+                        break;
+                    case EDUCATION:
+                        writeOrgList(dos, v);
+                        break;
                 }
-            }
+            });
         }
     }
 
@@ -94,6 +88,9 @@ public class DataStreamSerializer implements StreamSerializer {
                     for (int j = 0; j < orgListSize; j++) {
                         String orgName = dis.readUTF();
                         String orgUrl = dis.readUTF();
+                        if (orgUrl.equals("")) {
+                            orgUrl = null;
+                        }
 
                         List<Organization.Position> positions = new ArrayList<>();
                         int positionsListSize = dis.readInt();
@@ -113,6 +110,53 @@ public class DataStreamSerializer implements StreamSerializer {
                 }
             }
             return resume;
+        }
+    }
+
+    private void writeItemsList(DataOutputStream dos, Section section) {
+        List<String> listItems = ((ListSection) section).getItems();
+        try {
+            dos.writeInt(listItems.size());
+            listItems.forEach(item -> writeStringData(dos, item));
+        } catch (IOException e) {
+            throw new StorageException("Data writing error", e);
+        }
+    }
+
+    private void writeOrgList(DataOutputStream dos, Section section) {
+        List<Organization> organizations = ((OrganizationtSection) section).getOrganizations();
+        writeIntData(dos, organizations.size());
+        organizations.forEach(org -> {
+            writeStringData(dos, org.getOrgName());
+            String orgUrl = org.getOrgUrl();
+            writeStringData(dos, (orgUrl == null ? "" : orgUrl));
+
+            List<Organization.Position> positions = org.getPositions();
+            writeIntData(dos, positions.size());
+            positions.forEach(pos -> {
+                writeStringData(dos, pos.getStartDate().toString());
+                writeStringData(dos, pos.getEndDate().toString());
+                writeStringData(dos, pos.getPosition());
+                String description = pos.getDescription();
+                writeStringData(dos, (description == null ? "" : description));
+            });
+        });
+    }
+
+
+    private void writeStringData(DataOutputStream dos, String data) {
+        try {
+            dos.writeUTF(data);
+        } catch (IOException e) {
+            throw new StorageException("Data writing error", e);
+        }
+    }
+
+    private void writeIntData(DataOutputStream dos, int data) {
+        try {
+            dos.writeInt(data);
+        } catch (IOException e) {
+            throw new StorageException("Data writing error", e);
         }
     }
 }

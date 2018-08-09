@@ -131,7 +131,7 @@ public class AbstractStorageTest {
 
         Organization organisationData1 = new Organization(
                 "Organisation1",
-                "www.org1.com",
+                null,
                 new Organization.Position(2009, Month.JANUARY, 2010, Month.JANUARY,
                         "org1_pos", "org1_posDescr"),
                 new Organization.Position(2010, Month.JANUARY, 2012, Month.JUNE,
