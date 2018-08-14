@@ -34,7 +34,7 @@ public class DataStreamSerializer implements StreamSerializer {
                 switch (key) {
                     case OBJECTIVE:
                     case PERSONAL:
-                        dos.writeUTF(value.toString());
+                        dos.writeUTF(((TextSection) value).getContent());
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
@@ -44,15 +44,13 @@ public class DataStreamSerializer implements StreamSerializer {
                     case EDUCATION:
                         writeCollection(dos, ((OrganizationtSection) value).getOrganizations(), (org) -> {
                             dos.writeUTF(org.getOrgName());
-                            String orgUrl = org.getOrgUrl();
-                            dos.writeUTF(orgUrl == null ? "" : orgUrl);
+                            dos.writeUTF(org.getOrgUrl());
 
                             writeCollection(dos, org.getPositions(), (pos) -> {
                                 dos.writeUTF(pos.getStartDate().toString());
                                 dos.writeUTF(pos.getEndDate().toString());
                                 dos.writeUTF(pos.getPosition());
-                                String description = pos.getDescription();
-                                dos.writeUTF(description == null ? "" : description);
+                                dos.writeUTF(pos.getDescription());
                             });
                         });
                         break;
@@ -96,9 +94,6 @@ public class DataStreamSerializer implements StreamSerializer {
                         readCollection(dis, () -> {
                             String orgName = dis.readUTF();
                             String orgUrl = dis.readUTF();
-                            if (orgUrl.equals("")) {
-                                orgUrl = null;
-                            }
 
                             List<Organization.Position> positions = new ArrayList<>();
                             readCollection(dis, () -> {
@@ -106,9 +101,7 @@ public class DataStreamSerializer implements StreamSerializer {
                                 LocalDate endDate = LocalDate.parse(dis.readUTF());
                                 String position = dis.readUTF();
                                 String description = dis.readUTF();
-                                if (description.equals("")) {
-                                    description = null;
-                                }
+
                                 positions.add(new Organization.Position(startDate, endDate, position, description));
                             });
                             organizations.add(new Organization(new Link(orgName, orgUrl), positions));
@@ -133,5 +126,15 @@ public class DataStreamSerializer implements StreamSerializer {
         for (int i = 0; i < collectionSize; i++) {
             reader.readItem();
         }
+    }
+
+    @FunctionalInterface
+    private interface CollectionWriter<T> {
+        void writeItem(T collection) throws IOException;
+    }
+
+    @FunctionalInterface
+    private interface CollectionReader {
+        void readItem() throws IOException;
     }
 }
