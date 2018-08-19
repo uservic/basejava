@@ -1,13 +1,17 @@
 package ru.javawebinar.basejava;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class MainConcurrency {
     public static final int THREADS_NUMBER = 10000;
     private static volatile int counter;
-    private static final Object LOCK = new Object();
+//    private static final Object LOCK = new Object();
+    private static final Lock lock = new ReentrantLock();
+    private static final ThreadLocal<SimpleDateFormat> threadLocal = ThreadLocal.withInitial(SimpleDateFormat::new);
     private static AtomicInteger atomCounter = new AtomicInteger();
 
     public static void main(String[] args) throws InterruptedException {
@@ -31,33 +35,43 @@ public class MainConcurrency {
         }).start();
         System.out.println(thread0.getState());
 
-        List<Thread> threads = new ArrayList<>(THREADS_NUMBER);
+        CountDownLatch latch = new CountDownLatch(THREADS_NUMBER);
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        CompletionService completionService = new ExecutorCompletionService(executorService);
 
         for (int i = 0; i < THREADS_NUMBER; i++) {
-            Thread thread = new Thread(() -> {
+            Future<Integer> future = executorService.submit(() -> {
                 for (int j = 0; j < 100; j++) {
                     inc();
-//                    atomCounter.incrementAndGet();
                 }
+                latch.countDown();
+                return 5;
             });
-            thread.start();
-            threads.add(thread);
         }
 
-        threads.forEach(t-> {
+        /*threads.forEach(t -> {
             try {
                 t.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        });
-        System.out.println(counter);
+        });*/
+        latch.await();
+//        System.out.println(counter);
+        System.out.println(atomCounter.get());
+        executorService.shutdown();
 //        System.out.println(atomCounter);
     }
 
-    private synchronized static void inc() {
+    private static void inc() {
 //        synchronized (LOCK) {
-            counter++;
+//        lock.lock();
+//        try {
+//            counter++;
+        atomCounter.incrementAndGet();
+//        } finally {
+//            lock.unlock();
+//        }
 //            LOCK.wait();
 //        }
     }
