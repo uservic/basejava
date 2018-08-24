@@ -130,7 +130,7 @@ public class DataStreamSerializer implements StreamSerializer {
 
     @FunctionalInterface
     private interface CollectionWriter<T> {
-        void writeItem(T collection) throws IOException;
+        void writeItem(T item) throws IOException;
     }
 
     @FunctionalInterface
