@@ -37,26 +37,6 @@ public class SqlStorage implements Storage {
         sqlHelper.processTransaction("INSERT INTO resume (full_name, uuid) VALUES (?,?)",
                 "INSERT INTO contact (value, type, resume_uuid) VALUES (?, ?, ?)",
                 resume);
-
-//        sqlHelper.transactionalExecute((conn) -> {
-//            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
-//                ps.setString(1, resume.getUuid());
-//                ps.setString(2, resume.getFullName());
-//                ps.execute();
-//            }
-//
-//            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (value, type, resume_uuid)" +
-//                    " VALUES (?, ?, ?)")) {
-//                for (Map.Entry<ContactType, String> pair : resume.getContacts().entrySet()) {
-//                    ps.setString(1, pair.getValue());
-//                    ps.setString(2, pair.getKey().toString());
-//                    ps.setString(3, resume.getUuid());
-//                    ps.addBatch();
-//                }
-//                ps.executeBatch();
-//            }
-//            return null;
-//        });
     }
 
     @Override
@@ -88,10 +68,6 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume resume) {
-//        sqlHelper.processTransaction("UPDATE resume SET full_name=? WHERE uuid=?",
-//                "UPDATE contact c SET value=? WHERE c.type=? AND c.resume_uuid=?",
-//                resume);
-
         sqlHelper.processTransaction("UPDATE resume SET full_name=? WHERE uuid=?",
                " INSERT INTO contact AS c (value, type, resume_uuid) VALUES (?,?,?)" +
                          " ON CONFLICT(resume_uuid, type)" +
@@ -99,37 +75,6 @@ public class SqlStorage implements Storage {
                          " SET value=? " +
                          " WHERE c.type=? AND c.resume_uuid=?",
                          resume);
-
-//        sqlHelper.transactionalExecute((conn) -> {
-//            try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name=? WHERE uuid=?")) {
-//                ps.setString(1, resume.getFullName());
-//                ps.setString(2, resume.getUuid());
-//                if (ps.executeUpdate() == 0) {
-//                    throw new NotExistStorageException(resume.getUuid());
-//                }
-//            }
-//
-//            try (PreparedStatement ps = conn.prepareStatement(
-//                    " INSERT INTO contact AS c (value, type, resume_uuid) VALUES (?,?,?)" +
-//                            " ON CONFLICT(resume_uuid, type)" +
-//                            " DO UPDATE " +
-//                            " SET value=? " +
-//                            " WHERE c.type=? AND c.resume_uuid=?")) {
-//                for (Map.Entry<ContactType, String> pair : resume.getContacts().entrySet()) {
-//                    ps.setString(1, pair.getValue());
-//                    ps.setString(2, pair.getKey().toString());
-//                    ps.setString(3, resume.getUuid());
-//
-//                    ps.setString(4, pair.getValue());
-//                    ps.setString(5, pair.getKey().toString());
-//                    ps.setString(6, resume.getUuid());
-//
-//                    ps.addBatch();
-//                }
-//                ps.executeBatch();
-//            }
-//            return null;
-//        });
     }
 
     @Override
@@ -149,7 +94,6 @@ public class SqlStorage implements Storage {
             ResultSet rs = ps.executeQuery();
             List<Resume> resumes = new ArrayList<>();
             while (rs.next()) {
-//                resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
                 resumes.add(get(rs.getString("uuid")));
             }
             return resumes;

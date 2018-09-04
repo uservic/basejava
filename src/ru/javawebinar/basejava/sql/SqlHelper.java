@@ -50,7 +50,7 @@ public class SqlHelper {
     public void processTransaction(String queryOne, String queryTwo, Resume resume) {
         transactionalExecute((conn) -> {
             String resume_uuid = resume.getUuid();
-            try(PreparedStatement ps = conn.prepareStatement(queryOne)) {
+            try (PreparedStatement ps = conn.prepareStatement(queryOne)) {
                 ps.setString(1, resume.getFullName());
                 ps.setString(2, resume_uuid);
                 if (ps.executeUpdate() == 0) {
