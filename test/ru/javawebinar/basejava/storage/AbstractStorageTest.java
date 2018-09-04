@@ -5,11 +5,15 @@ import org.junit.Test;
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
+import ru.javawebinar.basejava.model.ContactType;
+import ru.javawebinar.basejava.model.Link;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.TextSection;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,9 +22,9 @@ public class AbstractStorageTest {
 
     protected Storage storage;
 
-    private static final String UUID_1 = "uuid1";
-    private static final String UUID_2 = "uuid2";
-    private static final String UUID_3 = "uuid3";
+    private static final String UUID_1 = UUID.randomUUID().toString();
+    private static final String UUID_2 = UUID.randomUUID().toString();
+    private static final String UUID_3 = UUID.randomUUID().toString();
 
     protected static final Resume RESUME_ONE = createResumeOne(UUID_1, "Ann One");
     protected static final Resume RESUME_TWO = createResumeTwo(UUID_2, "Bob Two");
@@ -34,9 +38,10 @@ public class AbstractStorageTest {
     @Before
     public void setUp() {
         storage.clear();
+
+        storage.save(RESUME_THREE);
         storage.save(RESUME_ONE);
         storage.save(RESUME_TWO);
-        storage.save(RESUME_THREE);
     }
 
     @Test
@@ -68,7 +73,7 @@ public class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume newResume = new Resume(UUID_3, "Joe_Three_Updated");
+        Resume newResume = createUpdatedResumeThree(UUID_3, "Joe_Three_Updated");
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_3));
     }
@@ -113,16 +118,16 @@ public class AbstractStorageTest {
     private static Resume createResumeOne(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-//        resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 921 123 45 67").toString());
-//        resume.addContact(ContactType.SKYPE, new TextSection("AnnOneskype.address").toString());
-//        resume.addContact(ContactType.EMAIL, new TextSection("ann@mail.com").toString());
-//
-//        Link linkMySite = new Link("HomePage", "www.mysite.com");
-//        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
-//
-//        Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/AnnOne.com");
-//        resume.addContact(ContactType.HOME_PAGE, linkMyLinkedIn.getUrl());
-//
+        resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 921 123 45 67").toString());
+        resume.addContact(ContactType.SKYPE, new TextSection("AnnOneskype.address").toString());
+        resume.addContact(ContactType.EMAIL, new TextSection("ann@mail.com").toString());
+
+        Link linkMySite = new Link("LinkedIn", "www.lnkd/AnnOne.com");
+        resume.addContact(ContactType.LINKEDIN, linkMySite.getUrl());
+
+        Link linkMyLinkedIn = new Link("HomePage", "www.Annsite.com");
+        resume.addContact(ContactType.HOME_PAGE, linkMyLinkedIn.getUrl());
+
 //        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
 //        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
 //
@@ -205,16 +210,38 @@ public class AbstractStorageTest {
     private static Resume createResumeThree(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-//        resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 921 123 45 67").toString());
-//        resume.addContact(ContactType.SKYPE, new TextSection("AnnOneskype.address").toString());
-//        resume.addContact(ContactType.EMAIL, new TextSection("ann@mail.com").toString());
+        resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 905 987 65 43").toString());
+        resume.addContact(ContactType.SKYPE, new TextSection("JoeThreeSkype.address").toString());
+        resume.addContact(ContactType.EMAIL, new TextSection("joe@mail.com").toString());
 //
 //        Link linkMySite = new Link("HomePage", "www.mysite.com");
 //        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
 //
-//        Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/AnnOne.com");
-//        resume.addContact(ContactType.HOME_PAGE, linkMyLinkedIn.getUrl());
+//        Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/JoeThree.com");
+//        resume.addContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
+
+//        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
+//        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
 //
+//        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
+//        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1", "qualifications content2"));
+
+        return resume;
+    }
+
+    private static Resume createUpdatedResumeThree(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+
+        resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 111 11 11 11").toString());
+        resume.addContact(ContactType.SKYPE, new TextSection("JoeThreeSkypeUpd.address").toString());
+        resume.addContact(ContactType.EMAIL, new TextSection("joe_Upd@mail.com").toString());
+
+        Link linkMySite = new Link("HomePage", "www.mysite_updated.com");
+        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
+
+        Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/JoeThree.com");
+        resume.addContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
+
 //        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
 //        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
 //
