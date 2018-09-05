@@ -75,6 +75,7 @@ public class AbstractStorageTest {
     public void update() {
         Resume newResume = createUpdatedResumeThree(UUID_3, "Joe_Three_Updated");
         storage.update(newResume);
+
         assertEquals(newResume, storage.get(UUID_3));
     }
 
@@ -213,12 +214,12 @@ public class AbstractStorageTest {
         resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 905 987 65 43").toString());
         resume.addContact(ContactType.SKYPE, new TextSection("JoeThreeSkype.address").toString());
         resume.addContact(ContactType.EMAIL, new TextSection("joe@mail.com").toString());
-//
-//        Link linkMySite = new Link("HomePage", "www.mysite.com");
-//        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
-//
-//        Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/JoeThree.com");
-//        resume.addContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
+
+        Link linkMySite = new Link("HomePage", "www.mysite.com");
+        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
+
+        Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/JoeThree.com");
+        resume.addContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
 
 //        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
 //        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
@@ -235,12 +236,12 @@ public class AbstractStorageTest {
         resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 111 11 11 11").toString());
         resume.addContact(ContactType.SKYPE, new TextSection("JoeThreeSkypeUpd.address").toString());
         resume.addContact(ContactType.EMAIL, new TextSection("joe_Upd@mail.com").toString());
-
-        Link linkMySite = new Link("HomePage", "www.mysite_updated.com");
-        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
-
-        Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/JoeThree.com");
-        resume.addContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
+////
+//        Link linkMySite = new Link("HomePage", "www.mysite_updated.com");
+//        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
+//
+//        Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/JoeThree.com");
+//        resume.addContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
 
 //        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
 //        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
