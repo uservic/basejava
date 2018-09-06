@@ -1,7 +1,6 @@
 package ru.javawebinar.basejava.sql;
 
 import ru.javawebinar.basejava.exception.StorageException;
-import ru.javawebinar.basejava.model.Resume;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,15 +21,6 @@ public class SqlHelper {
             return getter.get(ps);
         } catch (SQLException e) {
             throw ExceptionUtil.convertException(e);
-        }
-    }
-
-    public <R> R processQuery(String query, Resume resume, Connection conn,
-                              ResultSupplier<PreparedStatement, R> getter) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, resume.getFullName());
-            ps.setString(2, resume.getUuid());
-            return getter.get(ps);
         }
     }
 

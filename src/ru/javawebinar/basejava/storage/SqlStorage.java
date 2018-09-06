@@ -34,7 +34,7 @@ public class SqlStorage implements Storage {
     @Override
     public void save(Resume resume) {
         sqlHelper.transactionalExecute((conn) -> {
-            sqlHelper.processQuery("INSERT INTO resume (full_name, uuid) VALUES (?,?)",
+            processQuery("INSERT INTO resume (full_name, uuid) VALUES (?,?)",
                     resume, conn, PreparedStatement::execute);
             insertContact(resume, conn);
             return null;
@@ -65,11 +65,10 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume resume) {
         sqlHelper.transactionalExecute((conn) -> {
-            sqlHelper.processQuery("UPDATE resume SET full_name=? WHERE uuid=?", resume, conn, (ps) -> {
+            processQuery("UPDATE resume SET full_name=? WHERE uuid=?", resume, conn, (ps) -> {
                 if (ps.executeUpdate() == 0) {
                     throw new NotExistStorageException(resume.getUuid());
                 }
-                return null;
             });
 
             sqlHelper.processQuery("DELETE FROM contact c WHERE c.resume_uuid=?", (ps) -> {
@@ -141,5 +140,19 @@ public class SqlStorage implements Storage {
             }
             ps.executeBatch();
         }
+    }
+
+    private void processQuery(String query, Resume resume, Connection conn,
+                             resultConsumer getter) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, resume.getFullName());
+            ps.setString(2, resume.getUuid());
+            getter.consume(ps);
+        }
+    }
+
+    @FunctionalInterface
+    private interface resultConsumer {
+        void consume(PreparedStatement ps) throws SQLException;
     }
 }
