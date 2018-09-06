@@ -5,12 +5,10 @@ import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.sql.SqlHelper;
 
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SqlStorage implements Storage {
 
@@ -36,10 +34,9 @@ public class SqlStorage implements Storage {
     @Override
     public void save(Resume resume) {
         sqlHelper.transactionalExecute((conn) -> {
-            sqlHelper.processShortQuery("INSERT INTO resume (full_name, uuid) VALUES (?,?)",
+            sqlHelper.processQuery("INSERT INTO resume (full_name, uuid) VALUES (?,?)",
                     resume, conn, PreparedStatement::execute);
-            sqlHelper.processLongQuery("INSERT INTO contact (value, type, resume_uuid) VALUES (?, ?, ?)",
-                    resume, conn);
+            insertContact(resume, conn);
             return null;
         });
     }
@@ -68,7 +65,7 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume resume) {
         sqlHelper.transactionalExecute((conn) -> {
-            sqlHelper.processShortQuery("UPDATE resume SET full_name=? WHERE uuid=?", resume, conn, (ps) -> {
+            sqlHelper.processQuery("UPDATE resume SET full_name=? WHERE uuid=?", resume, conn, (ps) -> {
                 if (ps.executeUpdate() == 0) {
                     throw new NotExistStorageException(resume.getUuid());
                 }
@@ -80,8 +77,7 @@ public class SqlStorage implements Storage {
                 ps.execute();
                 return null;
             });
-            sqlHelper.processLongQuery("INSERT INTO contact (value, type, resume_uuid) VALUES (?, ?, ?)",
-                    resume, conn);
+            insertContact(resume, conn);
             return null;
         });
     }
@@ -122,12 +118,28 @@ public class SqlStorage implements Storage {
     }
 
     private void makeContact(Resume r, ResultSet rs) throws SQLException {
-        String type;
-        String value;
-        if ((type = rs.getString("type")) != null
-                && (value = rs.getString("value")) != null) {
+        String type = rs.getString("type");
+        String value = rs.getString("value");
+        if (type != null
+                && value != null) {
             ContactType ct = ContactType.valueOf(type);
             r.addContact(ct, value);
+        }
+    }
+
+    private void insertContact(Resume resume, Connection conn) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(
+                "INSERT INTO contact (value, type, resume_uuid) VALUES (?, ?, ?)")) {
+            for (Map.Entry<ContactType, String> pair : resume.getContacts().entrySet()) {
+                String value = pair.getValue();
+                String type = pair.getKey().toString();
+                String resume_uuid = resume.getUuid();
+                ps.setString(1, value);
+                ps.setString(2, type);
+                ps.setString(3, resume_uuid);
+                ps.addBatch();
+            }
+            ps.executeBatch();
         }
     }
 }
