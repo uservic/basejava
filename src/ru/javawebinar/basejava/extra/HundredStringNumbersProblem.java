@@ -16,26 +16,45 @@ public class HundredStringNumbersProblem {
     }
 
     public static List<String> moveMinStart(List<String> list) {
-        String minElement =
-                list.stream()
-                .min(Comparator.comparing(Integer::parseInt))
-                .get();
-        List<String> result = new ArrayList<>(list);
-        result.remove(minElement);
-        result.add(0, minElement);
-        return result;
+
+        int minValue = Integer.parseInt(list.get(0));
+        String minLink = null;
+
+        List<String> linkedList = new LinkedList<>(list);
+        Iterator<String> it = ((LinkedList<String>) linkedList).descendingIterator();
+        while (it.hasNext()) {
+           String elt = it.next();
+           Integer eltValue = Integer.parseInt(elt);
+            if ( eltValue < minValue) {
+                minValue = eltValue;
+                minLink = elt;
+            }
+        }
+        linkedList.remove(minLink);
+        ((LinkedList<String>) linkedList).addFirst(minLink);
+        return linkedList;
+
+//        String minElement =
+//                list.stream()
+//                        .min(Comparator.comparing(Integer::parseInt))
+//                        .get();
+//        List<String> result = new ArrayList<>(list);
+//        result.remove(minElement);
+//        result.add(0, minElement);
+//        return result;
     }
 
     public static List<String> maxTwoSidedSort(List<String> list) {
         Integer maxElement =
                 list.stream()
-                .max(Comparator.comparing(Integer::parseInt))
-                .map(Integer::parseInt)
-                .get();
+                        .max(Comparator.comparing(Integer::parseInt))
+                        .map(Integer::parseInt)
+                        .get();
         List<Integer> intList =
                 list.stream()
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList());
+
         Collections.sort(intList.subList(0, intList.indexOf(maxElement)));
         Collections.sort(intList.subList(intList.indexOf(maxElement), intList.size()), Collections.reverseOrder());
         return intList.stream()
@@ -45,17 +64,10 @@ public class HundredStringNumbersProblem {
 
     public static List<String> oddOrEven(List<String> list) {
         int sum = list.stream().map(Integer::valueOf).reduce(0, (a, b) -> a + b);
-        return sum % 2 == 0 ?
-                list.stream()
-                        .map(Integer::parseInt)
-                        .filter(x -> x % 2 != 0)
-                        .map(String::valueOf)
-                        .collect(Collectors.toList()) :
-
-                list.stream()
-                        .map(Integer::parseInt)
-                        .filter(x -> x % 2 == 0)
-                        .map(String::valueOf)
-                        .collect(Collectors.toList());
+        return list.stream()
+                .map(Integer::parseInt)
+                .filter(x -> sum % 2 == 0 ? x % 2 != 0 : x % 2 == 0)
+                .map(String::valueOf)
+                .collect(Collectors.toList());
     }
 }

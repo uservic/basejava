@@ -7,6 +7,7 @@ import ru.javawebinar.basejava.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -101,26 +102,25 @@ public class SqlStorage implements Storage {
                 " ORDER BY full_name, uuid", (ps) -> {
 
             ResultSet rs = ps.executeQuery();
-            List<Resume> resumes = new ArrayList<>();
+            Map<String, Resume> map = new LinkedHashMap<>();
 
             while (rs.next()) {
                 String resume_uuid = rs.getString("uuid");
-                Resume r = new Resume(resume_uuid, rs.getString("full_name"));
-                do {
+                Resume r = map.get(resume_uuid);
+                if (r == null) {
+                    r = new Resume(resume_uuid, rs.getString("full_name"));
+                    map.put(resume_uuid, r);
+                }
                     makeContact(r, rs);
-                } while (rs.next() && resume_uuid.equals(rs.getString("uuid")));
-                rs.previous();
-                resumes.add(r);
             }
-            return resumes;
+            return new ArrayList<>(map.values());
         });
     }
 
     private void makeContact(Resume r, ResultSet rs) throws SQLException {
         String type = rs.getString("type");
         String value = rs.getString("value");
-        if (type != null
-                && value != null) {
+        if (value != null) {
             ContactType ct = ContactType.valueOf(type);
             r.addContact(ct, value);
         }
