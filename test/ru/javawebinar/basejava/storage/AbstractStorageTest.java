@@ -5,10 +5,7 @@ import org.junit.Test;
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Link;
-import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.model.TextSection;
+import ru.javawebinar.basejava.model.*;
 
 import java.io.File;
 import java.util.Arrays;
@@ -75,7 +72,6 @@ public class AbstractStorageTest {
     public void update() {
         Resume newResume = createUpdatedResumeThree(UUID_3, "Joe_Three_Updated");
         storage.update(newResume);
-
         assertEquals(newResume, storage.get(UUID_3));
     }
 
@@ -129,12 +125,36 @@ public class AbstractStorageTest {
         Link linkMyLinkedIn = new Link("HomePage", "www.Annsite.com");
         resume.addContact(ContactType.HOME_PAGE, linkMyLinkedIn.getUrl());
 
-//        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
-//        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
-//
-//        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
-//        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1", "qualifications content2"));
-//
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущая стажировок и корпоративного обучения" +
+                " по Java Web и Enterprise технологиям"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика," +
+                " креативность, инициативность. Пурист кода и архитектуры."));
+
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(
+                "С 2013 года: разработка проектов" +
+                " \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность." +
+                " XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация" +
+                " онлайн стажировок и ведение проектов. Более 1000 выпускников.", "Реализация двухфакторной" +
+                " аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio, DuoSecurity," +
+                " Google Authenticator, Jira, Zendesk.",
+                "Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С," +
+                        " Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке:" +
+                        " Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей," +
+                        " интеграция CIFS/SMB java сервера.",
+                "Реализация c нуля Rich Internet Application приложения на стеке технологий JPA, Spring, Spring-MVC," +
+                        " GWT, ExtGWT (GXT), Commet, HTML5, Highstock для алгоритмического трейдинга.",
+                "Создание JavaEE фреймворка для отказоустойчивого взаимодействия слабо-связанных сервисов (SOA-base" +
+                        " архитектура, JAX-WS, JMS, AS Glassfish). Сбор статистики сервисов и информации о состоянии" +
+                        " через систему мониторинга Nagios. Реализация онлайн клиента для администрирования и" +
+                        " мониторинга системы по JMX (Jython/ Django)."));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(
+                "JEE AS: GlassFish (v2.1, v3), OC4J," +
+                " JBoss, Tomcat, Jetty, WebLogic, WSO2",
+                "Version control: Subversion, Git, Mercury, ClearCase, Perforce",
+                "DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle",
+                "MySQL, SQLite, MS SQL, HSQLDB",
+                "Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy"));
+
 //        Organization organisationData1 = new Organization(
 //                "Organisation1",
 //                null,
@@ -170,11 +190,11 @@ public class AbstractStorageTest {
     private static Resume createResumeTwo(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-//        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
-//        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
-//
-//        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
-//        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1", "qualifications content2"));
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
+
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1", "qualifications content2"));
 //
 //        Organization organisationData1 = new Organization(
 //                "Organisation1",
@@ -221,11 +241,11 @@ public class AbstractStorageTest {
         Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/JoeThree.com");
         resume.addContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
 
-//        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
-//        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
-//
-//        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
-//        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1", "qualifications content2"));
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
+
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1", "qualifications content2"));
 
         return resume;
     }
@@ -236,18 +256,18 @@ public class AbstractStorageTest {
         resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 111 11 11 11").toString());
         resume.addContact(ContactType.SKYPE, new TextSection("JoeThreeSkypeUpd.address").toString());
         resume.addContact(ContactType.EMAIL, new TextSection("joe_Upd@mail.com").toString());
-////
-//        Link linkMySite = new Link("HomePage", "www.mysite_updated.com");
-//        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
-//
-//        Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/JoeThree.com");
-//        resume.addContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
 
-//        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
-//        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
-//
-//        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
-//        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1", "qualifications content2"));
+        Link linkMySite = new Link("HomePage", "www.mysite_updated.com");
+        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
+
+        Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/JoeThree.com");
+        resume.addContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
+
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
+
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement_Upd content1", "achievement_Upd content2"));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications_Upd content1", "qualifications_Upd content2"));
 
         return resume;
     }

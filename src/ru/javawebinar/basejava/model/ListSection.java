@@ -43,6 +43,10 @@ public class ListSection extends Section {
 
     @Override
     public String toString() {
-        return items.toString();
+        StringBuilder sb = new StringBuilder();
+        for (String item : items) {
+            sb.append(item).append("\n");
+        }
+        return sb.toString();
     }
 }
