@@ -194,7 +194,8 @@ public class AbstractStorageTest {
         resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
 
         resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
-        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1", "qualifications content2"));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1",
+                "qualifications content2"));
 //
 //        Organization organisationData1 = new Organization(
 //                "Organisation1",

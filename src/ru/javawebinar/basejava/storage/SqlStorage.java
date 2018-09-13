@@ -183,6 +183,7 @@ public class SqlStorage implements Storage {
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
+                    s_value = s_value.replace("\\n", "\n");
                     List<String> items = Arrays.asList(s_value.split("\n"));
                     r.addSection(st, new ListSection(items));
                     break;

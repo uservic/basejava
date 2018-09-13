@@ -13,6 +13,12 @@ import java.io.IOException;
 import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
+    private Storage storage;
+
+    public void init() throws ServletException {
+        storage = Config.get().getStorage();
+    }
+
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
@@ -24,8 +30,6 @@ public class ResumeServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         String uuid = request.getParameter("uuid");
-
-        Storage storage = Config.get().getStorage();
 
         if (uuid == null) {
             List<Resume> list = storage.getAllSorted();

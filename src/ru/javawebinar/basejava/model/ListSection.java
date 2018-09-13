@@ -20,7 +20,8 @@ public class ListSection extends Section {
     }
 
     public ListSection(List<String> items) {
-        this.items = Objects.requireNonNull(items, "items must not be null");
+        this.items = Objects.requireNonNull(items,
+                "items must not be null");
     }
 
     public List<String> getItems() {
@@ -43,10 +44,6 @@ public class ListSection extends Section {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (String item : items) {
-            sb.append(item).append("\n");
-        }
-        return sb.toString();
+        return String.join("\n", items);
     }
 }

@@ -17,33 +17,14 @@ public class HundredStringNumbersProblem {
 
     public static List<String> moveMinStart(List<String> list) {
 
-        int minValue = Integer.parseInt(list.get(0));
-        String minLink = null;
-
-        List<String> linkedList = new LinkedList<>(list);
-        Iterator<String> it = ((LinkedList<String>) linkedList).descendingIterator();
-        while (it.hasNext()) {
-           String elt = it.next();
-           Integer eltValue = Integer.parseInt(elt);
-            if ( eltValue < minValue) {
-                minValue = eltValue;
-                minLink = elt;
-            }
-        }
-        linkedList.remove(minLink);
-        ((LinkedList<String>) linkedList).addFirst(minLink);
-        return linkedList;
-
-//        String minElement =
-//                list.stream()
-//                        .min(Comparator.comparing(Integer::parseInt))
-//                        .get();
-//        List<String> result = new ArrayList<>(list);
-//        result.remove(minElement);
-//        result.add(0, minElement);
-//        return result;
-
-
+        String minElement =
+                list.stream()
+                        .min(Comparator.comparing(Integer::parseInt))
+                        .get();
+        List<String> result = new LinkedList<>(list);
+        result.remove(minElement);
+        result.add(0, minElement);
+        return result;
     }
 
     public static List<String> maxTwoSidedSort(List<String> list) {
