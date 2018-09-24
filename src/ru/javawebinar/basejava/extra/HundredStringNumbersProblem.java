@@ -16,30 +16,39 @@ public class HundredStringNumbersProblem {
     }
 
     public static List<String> moveMinStart(List<String> list) {
-
-        String minElement =
-                list.stream()
-                        .min(Comparator.comparing(Integer::parseInt))
-                        .get();
         List<String> result = new LinkedList<>(list);
-        result.remove(minElement);
-        result.add(0, minElement);
+        list.stream()
+                .min(Comparator.comparing(Integer::parseInt))
+                .ifPresent(min -> {
+                    result.remove(min);
+                    result.add(0, min);
+                });
         return result;
     }
 
     public static List<String> maxTwoSidedSort(List<String> list) {
-        Integer maxElement =
-                list.stream()
-                        .max(Comparator.comparing(Integer::parseInt))
-                        .map(Integer::parseInt)
-                        .get();
+//        Integer maxElement =
+//                list.stream()
+//                        .max(Comparator.comparing(Integer::parseInt))
+//                        .map(Integer::parseInt)
+//                        .get();
         List<Integer> intList =
                 list.stream()
                         .map(Integer::parseInt)
                         .collect(Collectors.toList());
 
-        Collections.sort(intList.subList(0, intList.indexOf(maxElement)));
-        Collections.sort(intList.subList(intList.indexOf(maxElement), intList.size()), Collections.reverseOrder());
+        Integer max = intList.get(0);
+        int maxIndex = 0;
+        for (int i = 0; i < intList.size(); i++) {
+            Integer number = intList.get(i);
+            if (number > max) {
+                max = number;
+                maxIndex = i;
+            }
+        }
+
+        Collections.sort(intList.subList(0, maxIndex));
+        Collections.sort(intList.subList(maxIndex, intList.size()), Collections.reverseOrder());
         return intList.stream()
                 .map(String::valueOf)
                 .collect(Collectors.toList());

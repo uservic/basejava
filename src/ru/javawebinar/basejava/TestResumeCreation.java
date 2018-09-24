@@ -35,7 +35,7 @@ public class TestResumeCreation {
 //                "www.org2.com",
 //                new Organization.Position(2012, Month.JULY, "org2_pos", "org2_posDescr"));
 //
-//        resume.addSection(SectionType.EXPERIENCE, new OrganizationtSection(organisationData1, organisationData2));
+//        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(organisationData1, organisationData2));
 //
 //        Organization universityData1 = new Organization(
 //                "University1",
@@ -47,7 +47,7 @@ public class TestResumeCreation {
 //                "www.uni2.com",
 //                new Organization.Position(2005, Month.SEPTEMBER, 2007, Month.JUNE, "student", null));
 //
-//        resume.addSection(SectionType.EDUCATION, new OrganizationtSection(universityData1, universityData2));
+//        resume.addSection(SectionType.EDUCATION, new OrganizationSection(universityData1, universityData2));
 
         System.out.println();
 //        for (ContactType contactType : ContactType.values()) {

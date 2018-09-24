@@ -16,6 +16,7 @@ public class Resume implements Comparable<Resume>, Serializable {
     private static final long serialVersionUID = 1L;
     private String uuid;
     private String fullName;
+    public static final Resume EMPTY_RESUME = makeEmptyResume();
 
     private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
     private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
@@ -32,12 +33,27 @@ public class Resume implements Comparable<Resume>, Serializable {
         this.fullName = Objects.requireNonNull(fullName, "fullName must not be null");
     }
 
+    public static Resume makeEmptyResume() {
+        Resume resume = new Resume();
+        resume.addSection(SectionType.OBJECTIVE, new TextSection(""));
+        resume.addSection(SectionType.PERSONAL, new TextSection(""));
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(""));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(""));
+        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Organization("", "", new Organization.Position())));
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(new Organization("", "", new Organization.Position())));
+        return resume;
+    }
+
     public String getUuid() {
         return uuid;
     }
 
     public String getFullName() {
         return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Map<ContactType, String> getContacts() {

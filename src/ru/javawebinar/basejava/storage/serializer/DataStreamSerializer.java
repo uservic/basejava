@@ -42,7 +42,7 @@ public class DataStreamSerializer implements StreamSerializer {
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        writeCollection(dos, ((OrganizationtSection) value).getOrganizations(), (org) -> {
+                        writeCollection(dos, ((OrganizationSection) value).getOrganizations(), (org) -> {
                             dos.writeUTF(org.getOrgName());
                             dos.writeUTF(org.getOrgUrl());
 
@@ -106,7 +106,7 @@ public class DataStreamSerializer implements StreamSerializer {
                             });
                             organizations.add(new Organization(new Link(orgName, orgUrl), positions));
                         });
-                        resume.addSection(st, new OrganizationtSection(organizations));
+                        resume.addSection(st, new OrganizationSection(organizations));
                         break;
                 }
             });
