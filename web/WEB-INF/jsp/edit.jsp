@@ -35,7 +35,7 @@
 
             <hr>
             <button type="submit">Сохранить</button>
-            <button onclick="window.history.back()">Отменить</button>
+            <button onclick="window.history.back()">Назад</button>
             <hr>
 
             <h2>Секции:</h2>
@@ -45,19 +45,18 @@
                     <c:set var="section" value="${resume.getSection(type)}"/>
                     <jsp:useBean id="section" type="ru.javawebinar.basejava.model.Section"/>
                     <c:choose>
-                        <c:when test="${type.equals(SectionType.OBJECTIVE)
-                                        || type.equals(SectionType.PERSONAL)}">
+                        <c:when test="${type == (SectionType.OBJECTIVE)
+                                        || type == (SectionType.PERSONAL)}">
                             <textarea name="${type.name()}" rows="10" cols="70"> <%=section%></textarea>
                         </c:when>
 
-                        <c:when test="${type.equals(SectionType.ACHIEVEMENT)
-                                        || type.equals(SectionType.QUALIFICATIONS)}">
+                        <c:when test="${type == (SectionType.ACHIEVEMENT)
+                                        || type == (SectionType.QUALIFICATIONS)}">
                         <textarea name="${type.name()}" rows="15" cols="70"><%=String.join("\n", ((ListSection) section).getItems())%></textarea>
                         </c:when>
 
-                        <c:when test="${type.equals(SectionType.EXPERIENCE)
-                                        || type.equals(SectionType.EDUCATION)}">
-
+                        <c:when test="${type == (SectionType.EXPERIENCE)
+                                        || type == (SectionType.EDUCATION)}">
                             <c:set var="orgs" value="<%=((OrganizationSection) section).getOrganizations()%>"/>
                             <input type="hidden" name="${type.name()}" value="${orgs.size()}">
                             <c:forEach var="org" items="${orgs}" varStatus="orgCounter">
@@ -71,7 +70,6 @@
                                 <div style="padding-left: 30px">
 
                                     <input type="hidden" name="${type}posListSize${orgCounter.index}" value="${org.positions.size()}">
-
                                     <c:forEach var="pos" items="${org.positions}" varStatus="posCounter">
                                         <jsp:useBean id="pos"
                                                      type="ru.javawebinar.basejava.model.Organization.Position"/>
@@ -85,19 +83,21 @@
                                                 <dt>Начальная дата:</dt>
                                                 <dd>
                                                     <input type="text" name="${type}${orgCounter.index}startDate${posCounter.index}" size=30
-                                                           value="<%=DateUtil.parse(pos.getStartDate())%>" pattern="(0[1-9]|1[0-2])/[1-2][0-9]{3}"
+                                                           value="<%=DateUtil.parse(pos.getStartDate())%>" placeholder="ММ/ГГГГ"
+                                                           pattern="(0[1-9]|1[0-2])/[1-2][0-9]{3}|Сейчас"
                                                     title="Введите дату в фомате ММ/ГГГГ">
                                                 </dd>
                                                 <dt>Конечная дата:</dt>
                                                 <dd>
                                                     <input type="text" name="${type}${orgCounter.index}endDate${posCounter.index}" size=30
-                                                           value="<%=(DateUtil.parse(pos.getEndDate()))%>" pattern="((0[1-9]|1[0-2])/[1-2][0-9]{3})|Сейчас"
+                                                           value="<%=(DateUtil.parse(pos.getEndDate()))%>" placeholder="ММ/ГГГГ"
+                                                           pattern="((0[1-9]|1[0-2])/[1-2][0-9]{3})|Сейчас"
                                                            title="Введите дату в фомате ММ/ГГГГ или 'Сейчас'">
                                                 </dd>
                                                 <dt>Описание позиции</dt>
                                                 <dd>
-                                                    <input type="text" name="${type}${orgCounter.index}posDescr${posCounter.index}" size=30
-                                                           value="${pos.description}">
+                                                    <textarea name="${type}${orgCounter.index}posDescr${posCounter.index}" rows="3"
+                                                              cols="70">${pos.description}</textarea>
                                                 </dd>
                                             </div>
                                         </dl>
@@ -110,7 +110,7 @@
             </div>
             <hr>
             <button type="submit">Сохранить</button>
-            <button onclick="window.history.back()">Отменить</button>
+            <button onclick="window.history.back()">Назад</button>
             <hr>
         </form>
     </div>

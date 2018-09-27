@@ -151,7 +151,7 @@ public class SqlStorage implements Storage {
         String value = rs.getString("value");
         if (value != null) {
             ContactType ct = ContactType.valueOf(type);
-            r.addContact(ct, value);
+            r.setContact(ct, value);
         }
     }
 
@@ -160,7 +160,7 @@ public class SqlStorage implements Storage {
         String s_value = rs.getString("section_value");
         if (s_value != null) {
             SectionType st = SectionType.valueOf(s_type);
-            r.addSection(st, JsonParser.read(s_value, Section.class));
+            r.setSection(st, JsonParser.read(s_value, Section.class));
         }
     }
 

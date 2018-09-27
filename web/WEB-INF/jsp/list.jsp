@@ -10,7 +10,7 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <br>
-  Создать резюме <a href="resume?uuid=${resume.uuid}&action=create"><img src="img/add.png"></a>
+  Создать резюме <a href="resume?action=create"><img src="img/add.png"></a>
 <br>
 <br>
 <section>

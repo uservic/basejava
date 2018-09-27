@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +36,7 @@ public class ResumeServlet extends HttpServlet {
         }
 
         if (isNew) {
-            r = new Resume(fullName);
-            r.setFullName("Новое Резюме");
+            r = new Resume("Новое Резюме");
         } else {
             r = storage.get(uuid);
             r.setFullName(fullName);
@@ -47,7 +45,7 @@ public class ResumeServlet extends HttpServlet {
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
             if (!HtmlUtil.isEmpty(value)) {
-                r.addContact(type, value);
+                r.setContact(type, value);
             } else {
                 r.getContacts().remove(type);
             }
@@ -63,11 +61,11 @@ public class ResumeServlet extends HttpServlet {
                 switch (type) {
                     case OBJECTIVE:
                     case PERSONAL:
-                        r.addSection(type, new TextSection(value.trim()));
+                        r.setSection(type, new TextSection(value.trim()));
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        r.addSection(type, new ListSection(value.trim().split("\r\n")));
+                        r.setSection(type, new ListSection(value.trim().split("\r\n")));
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
@@ -96,7 +94,7 @@ public class ResumeServlet extends HttpServlet {
                                     organizationList.add(new Organization(new Link(orgName, orgUrl), positions));
                                 }
                             }
-                            r.addSection(type, new OrganizationSection(organizationList));
+                            r.setSection(type, new OrganizationSection(organizationList));
                         break;
                 }
             }
@@ -129,6 +127,9 @@ public class ResumeServlet extends HttpServlet {
             case "view":
                 r = storage.get(uuid);
                 break;
+            case "create":
+                r = Resume.makeEmptyResume();
+                break;
             case "edit":
                 r = storage.get(uuid);
                 for (SectionType type : SectionType.values()) {
@@ -148,25 +149,22 @@ public class ResumeServlet extends HttpServlet {
                             break;
                         case EXPERIENCE:
                         case EDUCATION:
-                            List<Organization> orgs = new ArrayList<>();
-                            orgs.add(new Organization("", "", new Organization.Position()));
+                            List<Organization> emptyFirstOrgs = new ArrayList<>();
+                            emptyFirstOrgs.add(Organization.EMPTY);
                             OrganizationSection organizationSection = (OrganizationSection) r.getSection(type);
                             if (organizationSection != null) {
                                 for (Organization org : organizationSection.getOrganizations()) {
-                                    List<Organization.Position> positions = new ArrayList<>();
-                                    positions.add(new Organization.Position());
-                                    positions.addAll(org.getPositions());
-                                    orgs.add(new Organization(new Link(org.getOrgName(), org.getOrgUrl()), positions));
+                                    List<Organization.Position> emptyFirstPositions = new ArrayList<>();
+                                    emptyFirstPositions.add(Organization.Position.EMPTY);
+                                    emptyFirstPositions.addAll(org.getPositions());
+                                    emptyFirstOrgs.add(new Organization(new Link(org.getOrgName(), org.getOrgUrl()), emptyFirstPositions));
                                 }
                             }
-                            section = new OrganizationSection(orgs);
+                            section = new OrganizationSection(emptyFirstOrgs);
                             break;
                     }
-                    r.addSection(type, section);
+                    r.setSection(type, section);
                 }
-                break;
-            case "create":
-                r = Resume.makeEmptyResume();
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");

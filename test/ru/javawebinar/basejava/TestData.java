@@ -18,22 +18,22 @@ public class TestData {
     public static Resume createResumeOne(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-        resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 921 123 45 67").toString());
-        resume.addContact(ContactType.SKYPE, new TextSection("AnnOneskype.address").toString());
-        resume.addContact(ContactType.EMAIL, new TextSection("ann@mail.com").toString());
+        resume.setContact(ContactType.PHONE_NUMBER, new TextSection("+7 921 123 45 67").toString());
+        resume.setContact(ContactType.SKYPE, new TextSection("AnnOneskype.address").toString());
+        resume.setContact(ContactType.EMAIL, new TextSection("ann@mail.com").toString());
 
         Link linkMySite = new Link("LinkedIn", "www.lnkd/AnnOne.com");
-        resume.addContact(ContactType.LINKEDIN, linkMySite.getUrl());
+        resume.setContact(ContactType.LINKEDIN, linkMySite.getUrl());
 
         Link linkMyLinkedIn = new Link("HomePage", "www.Annsite.com");
-        resume.addContact(ContactType.HOME_PAGE, linkMyLinkedIn.getUrl());
+        resume.setContact(ContactType.HOME_PAGE, linkMyLinkedIn.getUrl());
 
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущая стажировок и корпоративного обучения" +
+        resume.setSection(SectionType.OBJECTIVE, new TextSection("Ведущая стажировок и корпоративного обучения" +
                 " по Java Web и Enterprise технологиям"));
-        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика," +
+        resume.setSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика," +
                 " креативность, инициативность. Пурист кода и архитектуры."));
 
-        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(
+        resume.setSection(SectionType.ACHIEVEMENT, new ListSection(
                 "С 2013 года: разработка проектов" +
                         " \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность." +
                         " XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация" +
@@ -50,7 +50,7 @@ public class TestData {
                         " архитектура, JAX-WS, JMS, AS Glassfish). Сбор статистики сервисов и информации о состоянии" +
                         " через систему мониторинга Nagios. Реализация онлайн клиента для администрирования и" +
                         " мониторинга системы по JMX (Jython/ Django)."));
-        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(
+        resume.setSection(SectionType.QUALIFICATIONS, new ListSection(
                 "JEE AS: GlassFish (v2.1, v3), OC4J," +
                         " JBoss, Tomcat, Jetty, WebLogic, WSO2",
                 "Version control: Subversion, Git, Mercury, ClearCase, Perforce",
@@ -71,7 +71,7 @@ public class TestData {
                 "www.org2.com",
                 new Organization.Position(2012, Month.JULY, "org2_pos", "org2_posDescr"));
 
-        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(organisationData1, organisationData2));
+        resume.setSection(SectionType.EXPERIENCE, new OrganizationSection(organisationData1, organisationData2));
 
 //        Organization universityData1 = new Organization(
 //                "University1",
@@ -85,7 +85,7 @@ public class TestData {
 //                new Organization.Position(2005, Month.SEPTEMBER, 2007, Month.JUNE,
 //                        "student", null));
 //
-//        resume.addSection(SectionType.EDUCATION, new OrganizationSection(universityData1, universityData2));
+//        resume.setSection(SectionType.EDUCATION, new OrganizationSection(universityData1, universityData2));
 
         return resume;
     }
@@ -93,11 +93,11 @@ public class TestData {
     public static Resume createResumeTwo(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
-        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
+        resume.setSection(SectionType.OBJECTIVE, new TextSection("position content"));
+        resume.setSection(SectionType.PERSONAL, new TextSection("personal content"));
 
-        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
-        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1",
+        resume.setSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
+        resume.setSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1",
                 "qualifications content2"));
 
         Organization organisationData1 = new Organization(
@@ -113,7 +113,7 @@ public class TestData {
                 "www.org2.com",
                 new Organization.Position(2012, Month.JULY, "org2_pos", "org2_posDescr"));
 
-        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(organisationData1, organisationData2));
+        resume.setSection(SectionType.EXPERIENCE, new OrganizationSection(organisationData1, organisationData2));
 
         Organization universityData1 = new Organization(
                 "University1",
@@ -127,7 +127,7 @@ public class TestData {
                 new Organization.Position(2005, Month.SEPTEMBER, 2007, Month.JUNE,
                         "student", null));
 
-        resume.addSection(SectionType.EDUCATION, new OrganizationSection(universityData1, universityData2));
+        resume.setSection(SectionType.EDUCATION, new OrganizationSection(universityData1, universityData2));
 
         return resume;
     }
@@ -135,21 +135,21 @@ public class TestData {
     public static Resume createResumeThree(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-        resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 905 987 65 43").toString());
-        resume.addContact(ContactType.SKYPE, new TextSection("JoeThreeSkype.address").toString());
-        resume.addContact(ContactType.EMAIL, new TextSection("joe@mail.com").toString());
+        resume.setContact(ContactType.PHONE_NUMBER, new TextSection("+7 905 987 65 43").toString());
+        resume.setContact(ContactType.SKYPE, new TextSection("JoeThreeSkype.address").toString());
+        resume.setContact(ContactType.EMAIL, new TextSection("joe@mail.com").toString());
 
         Link linkMySite = new Link("HomePage", "www.mysite.com");
-        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
+        resume.setContact(ContactType.HOME_PAGE, linkMySite.getUrl());
 
         Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/JoeThree.com");
-        resume.addContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
+        resume.setContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
 
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
-        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
+        resume.setSection(SectionType.OBJECTIVE, new TextSection("position content"));
+        resume.setSection(SectionType.PERSONAL, new TextSection("personal content"));
 
-        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
-        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1", "qualifications content2"));
+        resume.setSection(SectionType.ACHIEVEMENT, new ListSection("achievement content1", "achievement content2"));
+        resume.setSection(SectionType.QUALIFICATIONS, new ListSection("qualifications content1", "qualifications content2"));
 
         return resume;
     }
@@ -157,21 +157,21 @@ public class TestData {
     public static Resume createUpdatedResumeThree(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-        resume.addContact(ContactType.PHONE_NUMBER, new TextSection("+7 111 11 11 11").toString());
-        resume.addContact(ContactType.SKYPE, new TextSection("JoeThreeSkypeUpd.address").toString());
-        resume.addContact(ContactType.EMAIL, new TextSection("joe_Upd@mail.com").toString());
+        resume.setContact(ContactType.PHONE_NUMBER, new TextSection("+7 111 11 11 11").toString());
+        resume.setContact(ContactType.SKYPE, new TextSection("JoeThreeSkypeUpd.address").toString());
+        resume.setContact(ContactType.EMAIL, new TextSection("joe_Upd@mail.com").toString());
 
         Link linkMySite = new Link("HomePage", "www.mysite_updated.com");
-        resume.addContact(ContactType.HOME_PAGE, linkMySite.getUrl());
+        resume.setContact(ContactType.HOME_PAGE, linkMySite.getUrl());
 
         Link linkMyLinkedIn = new Link("LinkedIn", "www.lnkd/JoeThree.com");
-        resume.addContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
+        resume.setContact(ContactType.LINKEDIN, linkMyLinkedIn.getUrl());
 
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("position content"));
-        resume.addSection(SectionType.PERSONAL, new TextSection("personal content"));
+        resume.setSection(SectionType.OBJECTIVE, new TextSection("position content"));
+        resume.setSection(SectionType.PERSONAL, new TextSection("personal content"));
 
-        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement_Upd content1", "achievement_Upd content2"));
-        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualifications_Upd content1", "qualifications_Upd content2"));
+        resume.setSection(SectionType.ACHIEVEMENT, new ListSection("achievement_Upd content1", "achievement_Upd content2"));
+        resume.setSection(SectionType.QUALIFICATIONS, new ListSection("qualifications_Upd content1", "qualifications_Upd content2"));
 
         return resume;
     }

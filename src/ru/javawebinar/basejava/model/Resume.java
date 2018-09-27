@@ -35,12 +35,12 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     public static Resume makeEmptyResume() {
         Resume resume = new Resume();
-        resume.addSection(SectionType.OBJECTIVE, new TextSection(""));
-        resume.addSection(SectionType.PERSONAL, new TextSection(""));
-        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(""));
-        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(""));
-        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Organization("", "", new Organization.Position())));
-        resume.addSection(SectionType.EDUCATION, new OrganizationSection(new Organization("", "", new Organization.Position())));
+        resume.setSection(SectionType.OBJECTIVE, TextSection.EMPTY);
+        resume.setSection(SectionType.PERSONAL, TextSection.EMPTY);
+        resume.setSection(SectionType.ACHIEVEMENT, ListSection.EMPTY);
+        resume.setSection(SectionType.QUALIFICATIONS, ListSection.EMPTY);
+        resume.setSection(SectionType.EXPERIENCE, new OrganizationSection(Organization.EMPTY));
+        resume.setSection(SectionType.EDUCATION, new OrganizationSection(Organization.EMPTY));
         return resume;
     }
 
@@ -72,11 +72,11 @@ public class Resume implements Comparable<Resume>, Serializable {
         return sections.get(st);
     }
 
-    public void addContact(ContactType ct, String contact) {
+    public void setContact(ContactType ct, String contact) {
         contacts.put(ct, contact);
     }
 
-    public void addSection(SectionType st, Section section) {
+    public void setSection(SectionType st, Section section) {
         sections.put(st, section);
     }
 

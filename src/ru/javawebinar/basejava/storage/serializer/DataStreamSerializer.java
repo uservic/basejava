@@ -69,7 +69,7 @@ public class DataStreamSerializer implements StreamSerializer {
             readCollection(dis, () -> {
                 ContactType ct = ContactType.valueOf(dis.readUTF());
                 String value = dis.readUTF();
-                resume.addContact(ct, value);
+                resume.setContact(ct, value);
             });
 
             readCollection(dis, () -> {
@@ -78,7 +78,7 @@ public class DataStreamSerializer implements StreamSerializer {
                     case OBJECTIVE:
                     case PERSONAL:
                         String value = dis.readUTF();
-                        resume.addSection(st, new TextSection(value));
+                        resume.setSection(st, new TextSection(value));
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
@@ -86,7 +86,7 @@ public class DataStreamSerializer implements StreamSerializer {
                         readCollection(dis, () -> {
                             items.add(dis.readUTF());
                         });
-                        resume.addSection(st, new ListSection(items));
+                        resume.setSection(st, new ListSection(items));
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
@@ -106,7 +106,7 @@ public class DataStreamSerializer implements StreamSerializer {
                             });
                             organizations.add(new Organization(new Link(orgName, orgUrl), positions));
                         });
-                        resume.addSection(st, new OrganizationSection(organizations));
+                        resume.setSection(st, new OrganizationSection(organizations));
                         break;
                 }
             });

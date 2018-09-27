@@ -51,3 +51,7 @@ input:invalid {
 input:valid {
     border: 2px solid black;
 }
+
+h3 {
+    margin: 15px 0 5px;
+}

@@ -2,6 +2,7 @@
 <%@ page import="ru.javawebinar.basejava.model.OrganizationSection" %>
 <%@ page import="ru.javawebinar.basejava.model.SectionType" %>
 <%@ page import="ru.javawebinar.basejava.util.DateUtil" %>
+<%@ page import="ru.javawebinar.basejava.model.TextSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -30,18 +31,19 @@
             <jsp:useBean id="sectionEntry"
                          type="java.util.Map.Entry<ru.javawebinar.basejava.model.SectionType,
                       ru.javawebinar.basejava.model.Section>"/>
-            <h2>${sectionEntry.key.title}</h2>
+            <c:set var="type" value="${sectionEntry.key}"/>
+            <h2>${type.title}</h2>
             <c:choose>
-                <c:when test="${sectionEntry.key.equals(SectionType.OBJECTIVE)
-            || sectionEntry.key.equals(SectionType.PERSONAL)}">
+
+                <c:when test="${type == (SectionType.OBJECTIVE)
+            || type == (SectionType.PERSONAL)}">
                     <%=sectionEntry.getValue()%>
                 </c:when>
 
-                <c:when test="${sectionEntry.key.equals(SectionType.ACHIEVEMENT)
-            || sectionEntry.key.equals(SectionType.QUALIFICATIONS)}">
-                    <c:set var="listSection" value="<%=((ListSection) sectionEntry.getValue()).getItems()%>"/>
+                <c:when test="${type == (SectionType.ACHIEVEMENT)
+            || type == (SectionType.QUALIFICATIONS)}">
                     <div>
-                        <c:forEach var="textItem" items="${listSection}">
+                        <c:forEach var="textItem" items="<%=((ListSection) sectionEntry.getValue()).getItems()%>">
                             <jsp:useBean id="textItem" type="java.lang.String"/>
                             <li>
                                     ${textItem}
@@ -50,14 +52,19 @@
                     </div>
                 </c:when>
 
-                <c:when test="${sectionEntry.key.equals(SectionType.EXPERIENCE)
-            || sectionEntry.key.equals(SectionType.EDUCATION)}">
-                    <c:set var="orgSection" value="<%=((OrganizationSection) sectionEntry.getValue()).getOrganizations()%>"/>
+                <c:when test="${type == (SectionType.EXPERIENCE)
+            || type == (SectionType.EDUCATION)}">
                     <div style="padding-left: 15px">
-                        <c:forEach var="orgItem" items="${orgSection}">
+                        <c:forEach var="orgItem" items="<%=((OrganizationSection) sectionEntry.getValue()).getOrganizations()%>">
                             <jsp:useBean id="orgItem" type="ru.javawebinar.basejava.model.Organization"/>
 
-                            <h3><a href="http://${orgItem.orgUrl}">${orgItem.orgName}</a></h3>
+                            <c:if test="${empty orgItem.orgUrl}">
+                                <h3>${orgItem.orgName}</h3>
+                            </c:if>
+                            <c:if test="${not empty orgItem.orgUrl}">
+                                <h3><a href="http://${orgItem.orgUrl}">${orgItem.orgName}</a></h3>
+                            </c:if>
+
                             <c:forEach var="positionItem" items="${orgItem.positions}">
                                 <jsp:useBean id="positionItem"
                                              type="ru.javawebinar.basejava.model.Organization.Position"/>
@@ -68,10 +75,10 @@
                                                 ${DateUtil.parse(positionItem.startDate)}
                                             - ${DateUtil.parse(positionItem
                                                 .endDate)}</td>
-                                        <td align="right"><b>${positionItem.position}</b><br/></td>
+                                        <td style="padding-left: 15px"><b>${positionItem.position}</b></td>
                                     </tr>
                                     <tr>
-                                        <td align="right">${positionItem.description}</td>
+                                        <td style="padding-left: 15px">${positionItem.description}</td>
                                     </tr>
                                 </table>
                             </c:forEach>
@@ -82,6 +89,7 @@
             </c:choose>
         </c:forEach>
         <hr size="2" noshade color="#b6c0c7">
+        <button onclick="window.history.back()">К списку резюме</button>
     </div>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
