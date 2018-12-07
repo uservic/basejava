@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Список всех резюме</title>
 </head>
-<body>
+<body class="inner">
 <jsp:include page="fragments/header.jsp"/>
 <br>
   Создать резюме <a href="resume?action=create"><img src="img/add.png"></a>
 <br>
 <br>
 <section>
-    <table border="1" cellpadding="8" cellspacing="0">
+    <table border="1" cellpadding="8" cellspacing="0" class="inner">
         <tr>
             <th>Имя</th>
             <th>Email</th>

@@ -15,10 +15,10 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <div style="padding-left: 50px">
+    <div class="inner">
         <h2>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"> </a>
         </h2>
-        <p>
+        <p style="text-align:left">
             <c:forEach var="contactEntry" items="${resume.contacts}">
                 <jsp:useBean id="contactEntry"
                              type="java.util.Map.Entry<ru.javawebinar.basejava.model.ContactType, java.lang.String>"/>
@@ -32,7 +32,10 @@
                          type="java.util.Map.Entry<ru.javawebinar.basejava.model.SectionType,
                       ru.javawebinar.basejava.model.Section>"/>
             <c:set var="type" value="${sectionEntry.key}"/>
-            <h2>${type.title}</h2>
+            <h2 style="text-align:left">${type.title}</h2>
+
+            <div class="left">
+
             <c:choose>
 
                 <c:when test="${type == (SectionType.OBJECTIVE)
@@ -42,7 +45,7 @@
 
                 <c:when test="${type == (SectionType.ACHIEVEMENT)
             || type == (SectionType.QUALIFICATIONS)}">
-                    <div>
+                    <div class="left">
                         <c:forEach var="textItem" items="<%=((ListSection) sectionEntry.getValue()).getItems()%>">
                             <jsp:useBean id="textItem" type="java.lang.String"/>
                             <li>
@@ -87,6 +90,9 @@
                 </c:when>
 
             </c:choose>
+
+            </div>
+
         </c:forEach>
         <hr size="2" noshade color="#b6c0c7">
         <button onclick="window.history.back()">К списку резюме</button>

@@ -1,3 +1,7 @@
+DELETE FROM section;
+DELETE FROM contact;
+DELETE FROM resume;
+
 INSERT INTO resume (uuid, full_name) VALUES
   ('34fe9bd7-45e8-40ec-9074-d91e8cd1e4c1', 'Ann One'),
   ('a92b2748-f01d-4109-b933-a298def6d8bb', 'Bob Two'),

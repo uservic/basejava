@@ -16,7 +16,8 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <div style="padding-left: 50px">
+    <div class="inner">
+    <div style="padding-left: 50px" class="left">
         <form method="post" action="resume" enctype="application/x-www-form-urlencoded">
             <input type="hidden" name="uuid" value="${resume.uuid}">
             <h2>Имя:</h2>
@@ -113,6 +114,7 @@
             <button onclick="window.history.back()">Назад</button>
             <hr>
         </form>
+    </div>
     </div>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
